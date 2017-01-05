@@ -7,7 +7,6 @@
   const cookieParser = require('cookie-parser');
   const bodyParser = require('body-parser');
   const session = require('cookie-session');
-  const flash = require('connect-flash');
   const morgan = require('morgan');
   const nunjucks = require('nunjucks');
   const passport = require('passport');
@@ -46,7 +45,6 @@
 
     require('../helpers/passport')(passport);
 
-    app.use(flash());
     app.use(express.static(path.join(__dirname, '..', '..', 'client')));
 
   };
