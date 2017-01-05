@@ -1,7 +1,13 @@
-### Setup
+## Fire It Up (but do the setup first)
+
+```sh
+$ gulp
+```
+
+## Setup
 
 
-## Postgres
+### Postgres
 
 Install postgreSQL
 
