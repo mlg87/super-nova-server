@@ -1,4 +1,4 @@
-const databaseName = 'boiler';
+const databaseName = 'supernova';
 
 module.exports = {
   development: {
