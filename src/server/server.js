@@ -1,8 +1,6 @@
 (function() {
 
   'use strict';
-  console.log(process.env.NODE_ENV);
-  console.log(process.env);
 
   const app = require('./app');
   const debug = require('debug')('herman-express:server');
