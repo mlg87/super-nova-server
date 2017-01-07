@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcryptjs');
 const knex = require('../db/connection');
 
 const handleErrors = (req) => {
