@@ -1,6 +1,6 @@
-const auth = require('./integration/auth/auth');
+const auth = require('./routes/auth/auth');
 
-const testRunner = Promise.resolve()
+const testRunner = Promise.resolve();
 
 testRunner.then(() => {
 

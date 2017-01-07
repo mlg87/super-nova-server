@@ -30,13 +30,13 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: '/auth/loginFailed'
   }), (req, res) => {
     let user = Object.assign({}, {id: req.user.id, username: req.user.username});
-    res.json({status: 200, message: 'success', user: user});
+    res.json({message: 'success', user: user});
   });
 
 router.get('/logout', authHelpers.checkAuthentication, (req,res) => {
   // req.logout added by passport - deletes the user from the session cookie
   req.logout();
-  res.json({status: 200, message: 'Logout succesful.'});
+  res.status(200).json({message: 'Logout succesful.'});
 });
 
 // ** helper routes ** //
