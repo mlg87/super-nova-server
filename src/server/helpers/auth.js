@@ -1,6 +1,7 @@
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const knex = require('../db/connection');
 
 const authHelpers = {
 
@@ -26,31 +27,33 @@ const authHelpers = {
   },
 
   checkAuthentication(req, res, next) {
-    if (!req.isAuthenticated()) {
-      return res.json({status: 401, message: 'Access denied.'});
-    } else {
-      return next();
+    if (!(req.headers && req.headers.authorization)) {
+      return res.status(400).json({
+        message: 'Please log in'
+      });
     }
-  },
-
-  // use this to send the user object back in the response
-  currentUser(req, res, next) {
-    // if user is authenticated (passport method returns true when serialized)
-    if (req.isAuthenticated()) {
-      // this is available in the view for all requests, deserializing FTW
-      res.locals.currentUser = req.user;
-      return next();
-    } else {
-      return next();
-    }
-  },
-
-  preventLoginSignup(req, res, next) {
-    if (req.user) {
-      return res.json({status: 406, message: 'Already logged in.'});
-    } else {
-      return next();
-    }
+    // decode the token
+    var header = req.headers.authorization.split(' ');
+    var token = header[1];
+    authHelpers.decodeToken(token, (err, payload) => {
+      if (err) {
+        return res.status(401).json({
+          message: 'Token has expired'
+        });
+      } else {
+        // check if the user still exists in the db
+        return knex('users').where({id: parseInt(payload.sub)}).first()
+        .then((user) => {
+          req.user = {id: user.id};
+          next();
+        })
+        .catch((err) => {
+          res.status(500).json({
+            message: 'error'
+          });
+        });
+      }
+    });
   },
 
   ensureCorrectUser(req,res,next) {
