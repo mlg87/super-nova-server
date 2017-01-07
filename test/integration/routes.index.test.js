@@ -17,20 +17,6 @@ describe('routes : index', () => {
     done();
   });
 
-  describe('GET /', () => {
-    it('should render the index', (done) => {
-      chai.request(server)
-      .get('/')
-      .end((err, res) => {
-        res.redirects.length.should.equal(0);
-        res.status.should.equal(200);
-        res.type.should.equal('text/html');
-        res.text.should.contain('<h1>Welcome to Express!</h1>');
-        res.text.should.contain('<h2>The sum is 3</h2>');
-        done();
-      });
-    });
-  });
 
   describe('GET /404', () => {
     it('should throw an error', (done) => {

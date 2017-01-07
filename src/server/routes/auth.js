@@ -12,14 +12,14 @@ router.post('/register', authHelpers.preventLoginSignup, (req, res, next)  => {
         if (err) {
           return next(err);
         }
-        return res.json({status: 200, message: `Success, ${user[0].username} is now registered`});
+        return res.json({message: `Success, ${user[0].username} is now registered`});
       })(req, res, next);
     })
     .catch((err) => {
       if (err) {
         res.json(err);
       } else {
-        res.json({status: 500, message: 'Regsitration failed'});
+        res.status(500).json({message: 'Regsitration failed'});
       }
     });
 });
