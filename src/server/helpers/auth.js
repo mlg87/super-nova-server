@@ -1,4 +1,23 @@
-const authMiddleware = {
+const moment = require('moment');
+const jwt = require('jsonwebtoken');
+
+const authHelpers = {
+
+  encodeToken(user) {
+    const playload = {
+      exp: moment().add(14, 'days').unix(),
+      iat: moment().unix(),
+      sub: user.id
+    };
+    return jwt.sign(playload, process.env.TOKEN_SECRET);
+  },
+
+  decodeToken(token, cb) {
+    const payload = jwt.verify(token, process.env.TOKEN_SECRET);
+    const now = moment().unix();
+    if (now > payload.exp) cb('Token has expired.');
+    else cb(null, payload);
+  },
 
   checkAuthentication(req, res, next) {
     if (!req.isAuthenticated()) {
@@ -37,4 +56,4 @@ const authMiddleware = {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = authHelpers;

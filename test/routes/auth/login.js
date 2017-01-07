@@ -18,10 +18,10 @@ module.exports = () => {
 
     describe('errors', () => {
       before((done) => {
-        done()
+        done();
       });
       after((done) => {
-        done()
+        done();
       });
 
       it('should redirect if login is unsuccessful', (done) => {
@@ -34,10 +34,10 @@ module.exports = () => {
           }
         })
         .end((err, res) => {
-          expect(res.redirects.length).to.equal(1)
+          expect(res.redirects.length).to.equal(1);
           done();
         });
-      })
+      });
     });
 
     describe('success', () => {
@@ -52,8 +52,6 @@ module.exports = () => {
         .post('/auth/register')
         .send({user})
         .end((err, res) => {
-          error = err;
-          response = res;
           done();
         });
       });
@@ -76,6 +74,5 @@ module.exports = () => {
       });
 
     });
-
   });
 };
