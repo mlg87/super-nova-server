@@ -28,7 +28,7 @@ router.post('/register', authHelpers.preventLoginSignup, (req, res, next)  => {
 router.post('/login', (req, res, next) => {
   const username = req.body.user.username;
   const password = req.body.user.password;
-  return knex('users').where({username})
+  return knex('users').where({username}).first()
   .then((user) => {
     authHelpers.comparePass(password, user.password);
     return user;
