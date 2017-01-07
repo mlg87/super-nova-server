@@ -17,6 +17,7 @@
   routeConfig.init(app);
   errorConfig.init(app);
 
+  console.log(process.env.NODE_ENV);
   module.exports = app;
 
 }());
