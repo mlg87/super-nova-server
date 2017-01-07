@@ -1,5 +1,6 @@
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const authHelpers = {
 
@@ -18,6 +19,10 @@ const authHelpers = {
     const now = moment().unix();
     if (now > payload.exp) cb('Token has expired.');
     else cb(null, payload);
+  },
+
+  comparePass(userpass, dbpass) {
+    bcrypt.compareSync(userpass, dbpass);
   },
 
   checkAuthentication(req, res, next) {

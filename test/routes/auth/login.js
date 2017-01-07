@@ -24,7 +24,7 @@ module.exports = () => {
         done();
       });
 
-      it('should redirect if login is unsuccessful', (done) => {
+      it('should return 400 if login is unsuccessful', (done) => {
         chai.request(server)
         .post('/auth/login')
         .send({
@@ -34,7 +34,9 @@ module.exports = () => {
           }
         })
         .end((err, res) => {
-          expect(res.redirects.length).to.equal(1);
+          console.log(res.body);
+          expect(res.status).to.equal(400);
+          expect(res.body.message).to.equal('Login failed.');
           done();
         });
       });
@@ -67,8 +69,8 @@ module.exports = () => {
         .post('/auth/login')
         .send({user})
         .end((err, res) => {
-          res.body.user.username.should.equal(user.username);
-          res.body.user.id.should.exist;
+          res.body.token.should.exist;
+          res.body.message.should.contain('Success');
           done();
         });
       });
