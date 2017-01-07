@@ -5,7 +5,7 @@ const testRunner = Promise.resolve();
 
 testRunner.then(() => {
 
-  // authRoutes();
+  authRoutes();
   authHelpers();
 
 });

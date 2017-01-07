@@ -3,7 +3,7 @@ const login = require('./login');
 
 module.exports = () => {
   describe('auth routes', () => {
-    // register();
+    register();
     login();
   });
 };

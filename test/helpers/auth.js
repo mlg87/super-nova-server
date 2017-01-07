@@ -25,11 +25,12 @@ module.exports = () => {
   describe('decodeToken()', () => {
 
     it('should return a token', (done) => {
-      const token = authHelpers.encodeToken({id: 1})
+      const token = authHelpers.encodeToken({id: 1, username: 'user123'});
       should.exist(token);
       const results = authHelpers.decodeToken(token, (err, res) => {
         should.not.exist(err);
         res.sub.should.eql(1);
+        res.username.should.eql('user123');
         done();
       });
 

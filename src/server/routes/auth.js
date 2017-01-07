@@ -7,13 +7,12 @@ const passport = require('passport');
 
 router.post('/register', authHelpers.preventLoginSignup, (req, res, next)  => {
   passwordHelpers.createUser(req)
-    .then((user) => {
-      req.login(user[0], (err)  => {
-        if (err) {
-          return next(err);
-        }
-        return res.json({message: `Success, ${user[0].username} is now registered`});
-      })(req, res, next);
+    .then((user) => { return authHelpers.encodeToken(user[0]); })
+    .then((token) => {
+      res.status(200).json({
+        token: token,
+        message: `Success. '${token.username}' has been created.`
+      });
     })
     .catch((err) => {
       if (err) {

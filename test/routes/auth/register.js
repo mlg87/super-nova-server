@@ -85,10 +85,11 @@ module.exports = () => {
         });
       });
 
-      it('should return json', (done) => {
+      it('should return json with a token', (done) => {
         response.status.should.equal(200);
         response.type.should.equal('application/json');
         response.body.message.should.contain('Success');
+        response.body.token.should.exist;
         done();
       });
     });
