@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const authHelpers = require('../helpers/auth');
-const passwordHelpers = require('../helpers/password');
 const knex = require('../db/connection');
 
 router.post('/register', (req, res, next)  => {
-  passwordHelpers.createUser(req)
+  authHelpers.createUser(req)
     .then((user) => { return authHelpers.encodeToken(user[0]); })
     .then((token) => {
       res.status(200).json({
