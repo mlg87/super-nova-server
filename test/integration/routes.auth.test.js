@@ -1,41 +1,73 @@
+/*jshint -W117*/
+/*jshint -W079*/
+/*jshint -W030*/
+
 process.env.NODE_ENV = 'test';
 
 const knex = require('../../src/server/db/connection');
 const chai = require('chai');
 const should = chai.should();
+const expect = chai.expect;
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
-const expect = chai.expect
 
 const server = require('../../src/server/app');
 
-describe('routes : auth/register', () => {
-  let response = null;
-  let error = null;
+describe('auth/register', () => {
 
-  before((done) => {
-    chai.request(server)
-    .post('/auth/register')
-    .send({
-      user: {
-        username: 'user123',
-        password: 'pass123'
-      }
-    })
-    .end((err, res) => {
-      error = err;
-      response = res;
+  describe('errors', () => {
+
+    beforeEach((done) => {
       done();
-    })
+    });
+
+    afterEach((done) => {
+      knex('users').del().then(() => {
+        done();
+      });
+    });
+
+    it('should throw error if username is not 6 or more characters', (done) => {
+      chai.request(server)
+      .post('/auth/register')
+      .send({
+        user: {
+          username: '',
+          password: 'pass'
+        }
+      })
+      .end((err, res) => {
+        expect(err).to.exist;
+        done();
+      });
+    });
   });
 
-  after((done) => {
-    knex('users').del().then(() => {
-      done();
-    })
-  });
+  describe('success', () => {
+    let response = null;
+    let error = null;
 
-  describe('POST /auth/register', () => {
+    before((done) => {
+      chai.request(server)
+      .post('/auth/register')
+      .send({
+        user: {
+          username: 'user123',
+          password: 'pass123'
+        }
+      })
+      .end((err, res) => {
+        error = err;
+        response = res;
+        done();
+      });
+    });
+
+    after((done) => {
+      knex('users').del().then(() => {
+        done();
+      });
+    });
 
     it('should not return an error', (done) => {
       expect(error).to.equal(null);
@@ -46,9 +78,9 @@ describe('routes : auth/register', () => {
       knex('users').then((users) => {
         users.length.should.equal(1);
         users[0].username.should.equal('user123');
-        users[0].id.should.be.defined;
+        expect(users[0].id).to.exist;
       }).then(() => {
-        done()
+        done();
       });
     });
 
@@ -59,5 +91,4 @@ describe('routes : auth/register', () => {
       done();
     });
   });
-
 });

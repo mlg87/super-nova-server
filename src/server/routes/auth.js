@@ -17,9 +17,9 @@ router.post('/register', authHelpers.preventLoginSignup, (req, res, next)  => {
     })
     .catch((err) => {
       if (err) {
-        res.json(err);
+        res.status(400).json(err);
       } else {
-        res.status(500).json({message: 'Regsitration failed'});
+        res.status(400).json({message: 'Regsitration failed'});
       }
     });
 });

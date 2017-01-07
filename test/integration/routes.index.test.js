@@ -17,7 +17,6 @@ describe('routes : index', () => {
     done();
   });
 
-
   describe('GET /404', () => {
     it('should throw an error', (done) => {
       chai.request(server)
