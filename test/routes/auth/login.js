@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 
 const server = require('../../../src/server/app');
 
-module.exports = () => {
+const tests = () => {
   describe('auth/login', () => {
 
     describe('errors', () => {
@@ -77,3 +77,7 @@ module.exports = () => {
     });
   });
 };
+
+if (process.env.NODE_ENV === 'test') {
+  module.exports = tests;
+}

@@ -77,3 +77,20 @@ $ gulp
 ```
 
 This app runs on port 3001. To change that go into _src/server/server.js_
+
+### How To Run Tests?
+
+Glad you asked!
+
+```sh
+$ NODE_ENV=test npm test
+```
+##### Making our test suite secure
+
+When writing tests be sure to wrap the `module.exports` in an if statement insuring that the NODE_ENV is 'test'.
+
+```javascript
+if (process.env.NODE_ENV === 'test') {
+  module.exports = tests;
+}
+```

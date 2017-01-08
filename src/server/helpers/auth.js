@@ -49,7 +49,7 @@ const authHelpers = {
         })
         .catch((err) => {
           res.status(500).json({
-            message: 'error'
+            message: 'User does not exist'
           });
         });
       }

@@ -2,8 +2,6 @@
 /*jshint -W079*/
 /*jshint -W030*/
 
-process.env.NODE_ENV = 'test';
-
 const knex = require('../../src/server/db/connection');
 const chai = require('chai');
 const should = chai.should();
@@ -14,7 +12,7 @@ chai.use(chaiHttp);
 const server = require('../../src/server/app');
 const authHelpers = require('../../src/server/helpers/auth');
 
-module.exports = () => {
+const tests = () => {
 
   describe('encodeToken()', () => {
 
@@ -77,3 +75,7 @@ module.exports = () => {
     });
   });
 };
+
+if (process.env.NODE_ENV === 'test') {
+  module.exports = tests;
+}
