@@ -9,7 +9,6 @@
 
     // *** register routes *** //
 
-    app.use('/', routes.admin);
     app.use('/auth/', routes.auth);
 
   };

@@ -6,10 +6,8 @@
   const path = require('path');
   const cookieParser = require('cookie-parser');
   const bodyParser = require('body-parser');
-  const session = require('cookie-session');
   const morgan = require('morgan');
   const nunjucks = require('nunjucks');
-  const passport = require('passport');
 
   // *** view folders *** //
   const viewFolders = [
@@ -35,15 +33,6 @@
     app.use(cookieParser());
     app.use(bodyParser.urlencoded({ extended: true}));
     app.use(bodyParser.json());
-    app.use(session({
-      secret: process.env.SECRET,
-      name: 'boiler',
-      maxage: 360000
-    }));
-    app.use(passport.initialize());
-    app.use(passport.session());
-
-    require('../helpers/passport')(passport);
 
     app.use(express.static(path.join(__dirname, '..', '..', 'client')));
 
