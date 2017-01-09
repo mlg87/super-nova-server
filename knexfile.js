@@ -11,6 +11,16 @@ module.exports = {
       directory: __dirname + '/src/server/db/seeds'
     }
   },
+  remote_dev: {
+    client: 'postgresql',
+    connection: `postgres://${process.env.RDS_HOSTNAME}:${process.env.RDS_PORT}/${databaseName}`,
+    migrations: {
+      directory: __dirname + '/src/server/db/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/src/server/db/seeds'
+    }
+  },
   test: {
     client: 'postgresql',
     connection: `postgres://localhost:5432/${databaseName}_test`,
