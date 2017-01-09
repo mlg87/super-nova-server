@@ -9,7 +9,7 @@ router.post('/register', (req, res, next)  => {
     .then((token) => {
       res.status(200).json({
         token: token,
-        message: `Success. '${token.username}' has been created.`
+        message: `Success. user has been created.`
       });
     })
     .catch((err) => {
