@@ -4,21 +4,11 @@ require('dotenv').config()
 module.exports = {
   development: {
     client: 'postgresql',
-    connection: `postgres://localhost:5432/${databaseName}`,
-    migrations: {
-      directory: __dirname + '/src/server/db/migrations'
-    },
-    seeds: {
-      directory: __dirname + '/src/server/db/seeds'
-    }
-  },
-  remote_dev: {
-    client: 'postgresql',
     connection: {
-      host : process.env.RDS_HOSTNAME,
+      host : process.env.RDS_HOSTNAME || 'localhost',
       user : process.env.RDS_USERNAME,
       password: process.env.RDS_PASSWORD,
-      port: process.env.RDS_PORT,
+      port: process.env.RDS_PORT || '5432',
       database : databaseName
     },
     migrations: {

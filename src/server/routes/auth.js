@@ -4,7 +4,6 @@ const authHelpers = require('../helpers/auth');
 const knex = require('../db/connection');
 
 router.post('/register', (req, res, next)  => {
-  console.log('################# hit me! ###################');
   authHelpers.createUser(req)
     .then((user) => { return authHelpers.encodeToken(user[0]); })
     .then((token) => {
@@ -15,7 +14,6 @@ router.post('/register', (req, res, next)  => {
     })
     .catch((err) => {
       if (err) {
-        console.log(err);
         res.status(400).json(err);
       } else {
         res.status(400).json({message: 'Regsitration failed'});
