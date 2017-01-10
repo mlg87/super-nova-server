@@ -1,4 +1,5 @@
 const databaseName = 'supernova';
+require('dotenv').config()
 
 module.exports = {
   development: {
