@@ -17,7 +17,7 @@ module.exports = {
       host : 'supernova.c6tx9kdtvryv.us-west-2.rds.amazonaws.com',
       user : 'supernova',
       database : databaseName
-    }
+    },
     migrations: {
       directory: __dirname + '/src/server/db/migrations'
     },
