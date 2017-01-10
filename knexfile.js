@@ -16,6 +16,7 @@ module.exports = {
     connection: {
       host : 'supernova.c6tx9kdtvryv.us-west-2.rds.amazonaws.com',
       user : 'supernova',
+      password: process.env.DB_PASSWORD,
       database : databaseName
     },
     migrations: {
