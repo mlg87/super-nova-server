@@ -14,6 +14,7 @@ router.post('/register', (req, res, next)  => {
     })
     .catch((err) => {
       if (err) {
+        console.log(err);
         res.status(400).json(err);
       } else {
         res.status(400).json({message: 'Regsitration failed'});
