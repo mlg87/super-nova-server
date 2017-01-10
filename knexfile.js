@@ -15,9 +15,10 @@ module.exports = {
   remote_dev: {
     client: 'postgresql',
     connection: {
-      host : 'supernova.c6tx9kdtvryv.us-west-2.rds.amazonaws.com',
-      user : 'supernova',
-      password: process.env.DB_PASSWORD,
+      host : process.env.RDS_HOSTNAME,
+      user : process.env.RDS_USERNAME,
+      password: process.env.RDS_PASSWORD,
+      port: process.env.RDS_PORT,
       database : databaseName
     },
     migrations: {
