@@ -13,7 +13,11 @@ module.exports = {
   },
   remote_dev: {
     client: 'postgresql',
-    connection: `postgres://supernova.c6tx9kdtvryv.us-west-2.rds.amazonaws.com:5432/${databaseName}`,
+    connection: {
+      host : 'supernova.c6tx9kdtvryv.us-west-2.rds.amazonaws.com',
+      user : 'supernova',
+      database : databaseName
+    }
     migrations: {
       directory: __dirname + '/src/server/db/migrations'
     },
