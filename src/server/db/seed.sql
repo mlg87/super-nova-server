@@ -1,6 +1,6 @@
 DELETE FROM clients;
-CREATE SEQUENCE seq RESTART WITH 1;
-UPDATE clients SET id=nextval('seq');
+ALTER SEQUENCE clients_id_seq RESTART WITH 1;
+-- UPDATE clients SET id=nextval('seq');
 INSERT INTO clients(name, time_zone) VALUES('Grand Junction', 'US/Mountain');
 
 DELETE FROM categories;
