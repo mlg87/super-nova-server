@@ -1,3 +1,6 @@
+# These get ignored when deploying to elastic beanstalk
 .DS_Store
 npm-debug.log
+
+# we ignore the modules because `npm install` is run on deployment
 node_modules
