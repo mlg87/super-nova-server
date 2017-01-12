@@ -1,3 +1,6 @@
+-- import gen_random_uuid
+CREATE EXTENSION pgcrypto;
+
 CREATE TYPE address AS (
   street TEXT,
   state CHAR(2),
@@ -26,7 +29,7 @@ CREATE TABLE inventory (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   description TEXT,
-  sku VARCHAR(50) NOT NULL DEFAULT id,
+  sku VARCHAR(50) NOT NULL DEFAULT gen_random_uuid(),
   category_id INT REFERENCES categories(id),
 
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -72,3 +75,18 @@ CREATE TABLE reservations (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   client_id INT REFERENCES clients(id) NOT NULL
 );
+
+-- Below is a function and trigger to set the sku of an inventory item to the id
+-- if it wasn't set.
+-- CREATE OR REPLACE FUNCTION set_sku_to_id() RETURNS TRIGGER AS $$
+--   BEGIN
+--     UPDATE inventory SET sku=CONCAT('#', NEW.id) WHERE id=NEW.id;
+--     RETURN NULL;
+--   END;
+-- $$ LANGUAGE plpgsql;
+--
+-- CREATE TRIGGER set_default_sku
+--   AFTER INSERT ON inventory
+--   FOR EACH ROW
+--   WHEN (NEW.sku IS NULL)
+--   EXECUTE PROCEDURE set_sku_to_id();
