@@ -10,54 +10,38 @@ CREATE TYPE address AS (
 
 CREATE TYPE gender AS ENUM ('Men''s', 'Women''s', 'Kids');
 
-CREATE TABLE clients (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(50) UNIQUE,
-  time_zone VARCHAR(50),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 -- inventory categories, e.g. 'climbing'
 CREATE TABLE categories (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(50) NOT NULL UNIQUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL,
-  UNIQUE(name, client_id)
 );
 
 -- list the types of sizes we have - shirt sizes, pants sizes, shoe sizes...
 CREATE TABLE size_types (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(60) NOT NULL,
+  name VARCHAR(60) NOT NULL UNIQUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL,
-  UNIQUE(name, client_id)
 );
 
 CREATE TABLE item_types (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(50) NOT NULL UNIQUE,
   -- general item type description.
   description TEXT,
   category_id INT REFERENCES categories(id),
   size_type_id INT REFERENCES size_types(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL,
-  UNIQUE(name, client_id)
 );
 
 CREATE TABLE brands (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
+  name VARCHAR(100) NOT NULL UNIQUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL,
-  UNIQUE(name, client_id)
 );
 
 CREATE TABLE models (
@@ -66,8 +50,7 @@ CREATE TABLE models (
   brand_id INT REFERENCES brands(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL,
-  UNIQUE(name, brand_id, client_id)
+  UNIQUE(name, brand_id)
 );
 
 CREATE TABLE sizes (
@@ -76,17 +59,14 @@ CREATE TABLE sizes (
   size_type_id INT REFERENCES size_types(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL,
-  UNIQUE(size, size_type_id, client_id)
+  UNIQUE(size, size_type_id)
 );
 
 CREATE TABLE tags (
   id SERIAL PRIMARY KEY,
-  tag VARCHAR(100) NOT NULL,
+  tag VARCHAR(100) NOT NULL UNIQUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL,
-  UNIQUE(tag, client_id)
 );
 
 CREATE TABLE inventory (
@@ -94,15 +74,13 @@ CREATE TABLE inventory (
   item_type_id INT REFERENCES item_types(id),
   -- item description, will inherit from the item type if null.
   description TEXT,
-  uuid VARCHAR(50) NOT NULL,
+  uuid VARCHAR(50) NOT NULL UNIQUE,
   size_id INT REFERENCES sizes(id),
   gender GENDER,
   brand_id INT REFERENCES brands(id),
   model_id INT REFERENCES models(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL,
-  UNIQUE(uuid, client_id)
 );
 
 CREATE TABLE join_tags_inv (
@@ -122,7 +100,6 @@ CREATE TABLE users (
   -- add roles in the future
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL
 );
 
 CREATE TABLE customers (
@@ -138,7 +115,6 @@ CREATE TABLE customers (
   birth_date DATE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL
 );
 
 CREATE TABLE reservations (
@@ -149,7 +125,6 @@ CREATE TABLE reservations (
   end_timestamp TIMESTAMPTZ NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  client_id INT REFERENCES clients(id) NOT NULL
 );
 
 CREATE TABLE join_reservations_inventory (
