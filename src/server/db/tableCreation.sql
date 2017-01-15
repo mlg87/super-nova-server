@@ -77,7 +77,6 @@ CREATE TABLE inventory (
   uuid VARCHAR(50) NOT NULL UNIQUE,
   size_id INT REFERENCES sizes(id),
   gender GENDER,
-  brand_id INT REFERENCES brands(id),
   model_id INT REFERENCES models(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -85,7 +84,7 @@ CREATE TABLE inventory (
 
 CREATE TABLE join_tags_inv (
   tag_id INT NOT NULL REFERENCES tags(id),
-  inv_id INT NOT NULL REFERENCES inventory(id)
+  inventory_id INT NOT NULL REFERENCES inventory(id)
 );
 
 CREATE TABLE join_brands_item_types (
