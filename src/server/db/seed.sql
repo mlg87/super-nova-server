@@ -53,6 +53,10 @@ DELETE FROM join_tags_inventory;
 INSERT INTO join_tags_inventory(tag_id, inventory_id) VALUES
   (5, 1), (3, 2), (4, 3), (1, 4), (2, 4);
 
+DELETE FROM join_brands_item_types;
+INSERT INTO join_brands_item_types(brand_id, item_type_id) VALUES
+  (1, 1), (2, 1), (3, 4), (4, 2), (4, 4), (5, 1);
+
 DELETE FROM users;
 INSERT INTO users(username, password) VALUES
   ('alon01', '$2a$10$IP64aD6GTDUQvtHznWjdKOPazCiFghrh9B3TZADOnVWIF/aaXCKSG')
