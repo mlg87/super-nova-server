@@ -106,13 +106,13 @@ CREATE TABLE inventory (
 );
 
 CREATE TABLE join_tags_inv (
-  tag_id INT REFERENCES tags(id),
-  inv_id INT REFERENCES inventory(id)
+  tag_id INT NOT NULL REFERENCES tags(id),
+  inv_id INT NOT NULL REFERENCES inventory(id)
 );
 
 CREATE TABLE join_brands_item_types (
-  brand_id INT REFERENCES brands(id),
-  item_type_id INT REFERENCES item_types(id)
+  brand_id INT  NOT NULL REFERENCES brands(id),
+  item_type_id INT  NOT NULL REFERENCES item_types(id)
 );
 
 CREATE TABLE users (
@@ -153,8 +153,8 @@ CREATE TABLE reservations (
 );
 
 CREATE TABLE join_reservations_inventory (
-  reservation_id INT REFERENCES reservations(id),
-  item_id INT REFERENCES inventory(id)
+  reservation_id INT NOT NULL REFERENCES reservations(id),
+  item_id INT NOT NULL REFERENCES inventory(id)
 );
 
 
