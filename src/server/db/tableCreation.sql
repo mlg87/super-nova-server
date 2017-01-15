@@ -101,13 +101,20 @@ CREATE TABLE users (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );
 
+CREATE TABLE customer_types (
+  id SERIAL PRIMARY KEY,
+  type VARCHAR(50) NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+)
+
 CREATE TABLE customers (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   user_id INT REFERENCES users(id),
   email VARCHAR(50) UNIQUE,
   -- student, alumni, etc.
-  type VARCHAR(30) NOT NULL,
+  type_id INT NOT NULL REFERENCES customer_types(id),
   student_id VARCHAR(50) UNIQUE,
   phone_number CHAR(10) UNIQUE CHECK(phone_number ~ '[0-9]{10}'),
   address ADDRESS,

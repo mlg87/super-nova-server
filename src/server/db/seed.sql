@@ -59,4 +59,13 @@ INSERT INTO join_brands_item_types(brand_id, item_type_id) VALUES
 
 DELETE FROM users;
 INSERT INTO users(username, password) VALUES
-  ('alon01', '$2a$10$IP64aD6GTDUQvtHznWjdKOPazCiFghrh9B3TZADOnVWIF/aaXCKSG')
+  ('alon01', '$2a$10$IP64aD6GTDUQvtHznWjdKOPazCiFghrh9B3TZADOnVWIF/aaXCKSG');
+
+DELETE FROM customer_types;
+ALTER SEQUENCE customer_types_id_seq RESTART WITH 1;
+INSERT INTO customer_types(type) VALUES
+  ('Staff'), ('Student'), ('Alumni'), ('Public');
+
+DELETE FROM customers;
+INSERT INTO customers(name, user_id, type_id) VALUES
+  ('Alon Dahari', 1, 1), ('Dick Grossweiner', null, 2);
