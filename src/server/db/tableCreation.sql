@@ -94,7 +94,7 @@ CREATE TABLE inventory (
   item_type_id INT REFERENCES item_types(id),
   -- item description, will inherit from the item type if null.
   description TEXT,
-  sku VARCHAR(50) NOT NULL,
+  uuid VARCHAR(50) NOT NULL,
   size_id INT REFERENCES sizes(id),
   gender GENDER,
   brand_id INT REFERENCES brands(id),
@@ -143,7 +143,6 @@ CREATE TABLE customers (
 
 CREATE TABLE reservations (
   id SERIAL PRIMARY KEY,
-  inventory_id INT REFERENCES inventory(id) NOT NULL,
   customer_id INT REFERENCES customers(id) NOT NULL,
   user_id INT REFERENCES users(id) NOT NULL,
   start_timestamp TIMESTAMPTZ NOT NULL,
@@ -152,6 +151,11 @@ CREATE TABLE reservations (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   client_id INT REFERENCES clients(id) NOT NULL
 );
+
+CREATE TABLE join_reservations_inventory (
+  reservation_id INT REFERENCES reservations(id),
+  item_id INT REFERENCES inventory(id)
+)
 
 
 -- Create a trigger function that takes no arguments.
