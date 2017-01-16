@@ -53,7 +53,7 @@ INSERT INTO inventory(item_type_id, size_id, gender, model_id) VALUES
   (1, NULL, NULL, 4),
   (2, 5, 'Men''s', 1),
   (3, 2, 'Men''s', 2),
-  (4, 7, 'Women''s', 4);
+  (4, 7, 'Women''s', 3);
 
 INSERT INTO join_tags_inventory(tag_id, inventory_id) VALUES
   (5, 1), (3, 2), (4, 3), (1, 4), (2, 4);
