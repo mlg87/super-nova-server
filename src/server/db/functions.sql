@@ -20,7 +20,7 @@ RETURNS TABLE (item_id INT, type VARCHAR(50), uuid VARCHAR(50), size VARCHAR(40)
 AS $$
 
 -- we have to specify the fields again here
-SELECT DISTINCT item_id, type, uuid, size, gender, model, brand FROM get_inventory(1000000)
+SELECT DISTINCT item_id, type, uuid, size, gender, model, brand FROM get_inventory(NULnull)
 -- get the tags, although we won't return them, for the search
 LEFT OUTER JOIN join_tags_inventory jti ON jti.inventory_id = item_id
 LEFT OUTER JOIN tags t ON jti.tag_id = t.id
