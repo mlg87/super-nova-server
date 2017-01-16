@@ -24,6 +24,7 @@ $$ LANGUAGE SQL STABLE;
 
 -- get inventory by searching through model, brand, type and tags.
 -- Accepts a limit as a second argument.
+-- returns all values if TEXT = ''
 CREATE OR REPLACE FUNCTION search_inventory(TEXT, INT)
 RETURNS TABLE (
   item_id INT,
@@ -58,6 +59,7 @@ $$ LANGUAGE SQL STABLE;
 -- get customers with the type, ordered by last reservation. Accepts a limit.
 -- we also return last_reservation, thought it might be useful and it makes sorting easier.
 -- if we don't end up using it, we can use CTE instead (WITH a temp expression)
+-- returns all values if TEXT = ''
 CREATE OR REPLACE FUNCTION search_customers(TEXT, INT)
 RETURNS TABLE (
   customer_id INT,
