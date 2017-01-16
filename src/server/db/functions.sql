@@ -19,9 +19,13 @@ CREATE OR REPLACE FUNCTION search_in_inventory(TEXT, INT)
 RETURNS TABLE (item_id INT, type VARCHAR(50), uuid VARCHAR(50), size VARCHAR(40), gender GENDER, model VARCHAR(100), brand VARCHAR(100))
 AS $$
 
+-- we have to specify the fields again here
 SELECT DISTINCT item_id, type, uuid, size, gender, model, brand FROM get_inventory()
+-- get the tags, although we won't return them, for the search
 LEFT OUTER JOIN join_tags_inventory jti ON jti.inventory_id = item_id
 LEFT OUTER JOIN tags t ON jti.tag_id = t.id
+-- model and brand need to be an exact match, type and tags can be close...
+-- spaces between search terms are treated with AND ('shoes kayak') will only return rows with both matching
 WHERE model || ' ' || brand || ' ' || to_tsvector(type) || to_tsvector(t.tag) @@ to_tsquery(REPLACE($1, ' ', ' & '))
 LIMIT $2
 
