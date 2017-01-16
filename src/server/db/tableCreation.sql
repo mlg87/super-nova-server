@@ -76,7 +76,9 @@ CREATE TABLE inventory (
   description TEXT,
   uuid VARCHAR(50) NOT NULL UNIQUE,
   size_id INT REFERENCES sizes(id),
+  -- gender can be null
   gender GENDER,
+  -- ASSUMES every model must have a brand
   model_id INT REFERENCES models(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
