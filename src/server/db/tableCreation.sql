@@ -71,7 +71,7 @@ CREATE TABLE tags (
 
 CREATE TABLE inventory (
   id SERIAL PRIMARY KEY,
-  item_type_id INT REFERENCES item_types(id),
+  item_type_id INT REFERENCES item_types(id) NOT NULL,
   -- item description, will inherit from the item type if null.
   description TEXT,
   uuid VARCHAR(50) NOT NULL UNIQUE,
