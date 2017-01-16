@@ -13,6 +13,7 @@ DELETE FROM brands;
 DELETE FROM item_types;
 DELETE FROM size_types;
 DELETE FROM categories;
+
 -- reset the id field so it can be referenced by other tables
 ALTER SEQUENCE categories_id_seq RESTART WITH 1;
 INSERT INTO categories(name) VALUES
@@ -74,6 +75,52 @@ ALTER SEQUENCE customer_types_id_seq RESTART WITH 1;
 INSERT INTO customer_types(type) VALUES
   ('Staff'), ('Student'), ('Alumni'), ('Public');
 
-INSERT INTO customers(name, user_id, type_id, email, student_id, phone_number, address, birth_date) VALUES
-  ('Alon Dahari', 1, 1, 'climbinghobo@gmail.com', null, '5415151548', row('4127 Tejon street', 'Denver', 'CO', 'USA', '80211'), '02/28/1984'),
-  ('Dick Grossweiner', null, 2);
+INSERT INTO customers(first_name, last_name, user_id, type_id, gender_id, email, student_id, phone_number, address, birth_date) VALUES
+  (
+    'Alon',
+    'Dahari',
+    1,
+    1,
+    1,
+    'climbinghobo@gmail.com',
+    null,
+    '5415151548',
+    row('4127 Tejon street', 'Denver', 'CO', 'USA', '80211'),
+    '1984-02-28'
+  ),
+  (
+    'Dick',
+    'Grossweiner',
+    null,
+    2,
+    4,
+    'dick69@gmail.com',
+    'M-12345',
+    '9384628463',
+    row('9612 sunset st', 'pembroke pines', 'LA', 'USA', '18332'),
+    '1982-11-13'
+  ),
+  (
+    'vicki',
+    'mitchell',
+    null,
+    2,
+    2,
+    'vicki.mitchell@example.com',
+    'M-74533',
+    '5879055543',
+    row('5649 central st', 'clearwater', 'OR', 'USA', '78937'),
+    '1985-10-11'
+  ),
+  (
+    'todd',
+    'perez',
+    null,
+    3,
+    2,
+    'todd.perez@example.com',
+    null,
+    '7460923497',
+    row('6660 college st', 'fountain valley', 'AR', 'USA', '85701'),
+    '1952-04-07'
+  );

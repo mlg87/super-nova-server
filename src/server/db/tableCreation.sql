@@ -18,8 +18,10 @@ DROP TABLE brands;
 DROP TABLE item_types;
 DROP TABLE size_types;
 DROP TABLE categories;
+DROP TABLE genders;
+-- CASCADE drops anything that has address in it.
+DROP TYPE address CASCADE;
 
--- we don't drop the types, alter them if needed
 CREATE TYPE address AS (
   street TEXT,
   city VARCHAR(100),
@@ -32,7 +34,7 @@ CREATE TABLE genders (
   id SERIAL PRIMARY KEY,
   customer VARCHAR(40),
   inventory VARCHAR(40)
-)
+);
 
 -- inventory categories, e.g. 'climbing'
 CREATE TABLE categories (
@@ -136,7 +138,8 @@ CREATE TABLE customer_types (
 
 CREATE TABLE customers (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
   user_id INT REFERENCES users(id),
   email VARCHAR(100) UNIQUE,
   -- student, alumni, etc.

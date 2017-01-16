@@ -1,20 +1,14 @@
--- https://wiki.postgresql.org/wiki/First/last_(aggregate)
--- Create a function that always returns the first non-NULL item
-CREATE OR REPLACE FUNCTION public.first_agg ( anyelement, anyelement )
-RETURNS anyelement LANGUAGE SQL IMMUTABLE STRICT AS $$
-  SELECT $1;
-$$;
-
--- And then wrap an aggregate around it
-CREATE AGGREGATE public.FIRST (
-  sfunc    = public.first_agg,
-  basetype = anyelement,
-  stype    = anyelement
-);
-
 -- get all inventory in a formatted table, accepts a limit
 CREATE OR REPLACE FUNCTION get_inventory(INT)
-RETURNS TABLE (item_id INT, type VARCHAR(50), uuid VARCHAR(50), size VARCHAR(40), gender VARCHAR(40), model VARCHAR(100), brand VARCHAR(100))
+RETURNS TABLE (
+  item_id INT,
+  type VARCHAR(50),
+  uuid VARCHAR(50),
+  size VARCHAR(40),
+  gender VARCHAR(40),
+  model VARCHAR(100),
+  brand VARCHAR(100)
+)
 AS $$
 
 SELECT DISTINCT i.id as item_id, it.name as type, i.uuid, s.size, g.inventory AS gender, m.name AS model, b.name AS brand
@@ -30,8 +24,16 @@ $$ LANGUAGE SQL STABLE;
 
 -- get inventory by searching through model, brand, type and tags.
 -- Accepts a limit as a second argument.
-CREATE OR REPLACE FUNCTION search_in_inventory(TEXT, INT)
-RETURNS TABLE (item_id INT, type VARCHAR(50), uuid VARCHAR(50), size VARCHAR(40), gender VARCHAR(40), model VARCHAR(100), brand VARCHAR(100))
+CREATE OR REPLACE FUNCTION search_inventory(TEXT, INT)
+RETURNS TABLE (
+  item_id INT,
+  type VARCHAR(50),
+  uuid VARCHAR(50),
+  size VARCHAR(40),
+  gender VARCHAR(40),
+  model VARCHAR(100),
+  brand VARCHAR(100)
+)
 AS $$
 
 -- we have to specify the fields again here
@@ -42,6 +44,7 @@ LEFT OUTER JOIN tags t ON jti.tag_id = t.id
 -- model and brand need to be an exact match, type and tags can be close...
 -- spaces between search terms are treated with AND ('shoes kayak') will only return rows with both matching
 WHERE
+  $1 = '' OR
   model || ' '
   || brand || ' '
   || to_tsvector(type)
@@ -55,10 +58,11 @@ $$ LANGUAGE SQL STABLE;
 -- get customers with the type, ordered by last reservation. Accepts a limit.
 -- we also return last_reservation, thought it might be useful and it makes sorting easier.
 -- if we don't end up using it, we can use CTE instead (WITH a temp expression)
-CREATE OR REPLACE FUNCTION get_customers(INT)
+CREATE OR REPLACE FUNCTION search_customers(TEXT, INT)
 RETURNS TABLE (
   customer_id INT,
-  name VARCHAR(100),
+  first_name VARCHAR(100),
+  last_name VARCHAR(100),
   user_id INT,
   email VARCHAR(100),
   type VARCHAR(50),
@@ -69,12 +73,24 @@ RETURNS TABLE (
   last_reservation TIMESTAMPTZ
 )
 AS $$
-  -- we use coalesce on the type because we must aggregate the value or add
-  -- ct to the GROUP BY. coalesce simply returns the first non-null value.
-  SELECT DISTINCT c.id, c.name, c.user_id, c.email, FIRST(ct.type), c.student_id, c.phone_number, c.address, c.birth_date, MAX(r.created_at)
+  -- ct is in the GROUP BY, otherwise we'll have to aggregate it.
+  SELECT DISTINCT
+    c.id,
+    c.first_name,
+    c.last_name,
+    c.user_id,
+    c.email,
+    ct.type,
+    c.student_id,
+    c.phone_number,
+    c.address,
+    c.birth_date,
+    MAX(r.created_at) as last_reservation
   FROM customers c
   JOIN customer_types ct ON c.type_id = ct.id
   LEFT OUTER JOIN reservations r ON r.customer_id = c.id
-  GROUP BY c.id
-  LIMIT $1
+  WHERE $1 = '' OR lower($1) IN (lower(first_name), lower(last_name), lower(email), phone_number)
+  GROUP BY c.id, ct.type
+  ORDER BY last_reservation
+  LIMIT $2
 $$ LANGUAGE SQL STABLE;
