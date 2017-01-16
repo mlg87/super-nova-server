@@ -22,12 +22,17 @@ DROP TABLE categories;
 -- we don't drop the types, alter them if needed
 CREATE TYPE address AS (
   street TEXT,
+  city VARCHAR(100),
   state CHAR(2),
   country VARCHAR(50),
   zip_code VARCHAR(10)
 );
 
-CREATE TYPE gender AS ENUM ('Men''s', 'Women''s', 'Kids');
+CREATE TABLE genders (
+  id SERIAL PRIMARY KEY,
+  customer VARCHAR(40),
+  inventory VARCHAR(40)
+)
 
 -- inventory categories, e.g. 'climbing'
 CREATE TABLE categories (
@@ -96,7 +101,7 @@ CREATE TABLE inventory (
   uuid VARCHAR(50) NOT NULL UNIQUE,
   size_id INT REFERENCES sizes(id),
   -- gender can be null
-  gender GENDER,
+  gender_id INT REFERENCES genders(id),
   -- ASSUMES every model must have a brand
   model_id INT REFERENCES models(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -133,9 +138,10 @@ CREATE TABLE customers (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   user_id INT REFERENCES users(id),
-  email VARCHAR(50) UNIQUE,
+  email VARCHAR(100) UNIQUE,
   -- student, alumni, etc.
   type_id INT NOT NULL REFERENCES customer_types(id),
+  gender_id INT REFERENCES genders(id),
   student_id VARCHAR(50) UNIQUE,
   phone_number CHAR(10) UNIQUE CHECK(phone_number ~ '[0-9]{10}'),
   address ADDRESS,

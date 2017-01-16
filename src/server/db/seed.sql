@@ -5,6 +5,7 @@ DELETE FROM users;
 DELETE FROM join_brands_item_types;
 DELETE FROM join_tags_inventory;
 DELETE FROM inventory;
+DELETE FROM genders;
 DELETE FROM tags;
 DELETE FROM sizes;
 DELETE FROM models;
@@ -48,12 +49,16 @@ ALTER SEQUENCE tags_id_seq RESTART WITH 1;
 INSERT INTO tags(tag) VALUES
   ('Travel'), ('Travel Pack'), ('Crack climbing'), ('Safety'), ('River');
 
+ALTER SEQUENCE genders_id_seq RESTART WITH 1;
+INSERT INTO genders(customer, inventory) VALUES
+  ('Male', 'Men''s'), ('Female', 'Women''s'), (null, 'Kids'), ('Other', null);
+
 ALTER SEQUENCE inventory_id_seq RESTART WITH 1;
-INSERT INTO inventory(item_type_id, size_id, gender, model_id) VALUES
+INSERT INTO inventory(item_type_id, size_id, gender_id, model_id) VALUES
   (1, NULL, NULL, 4),
-  (2, 5, 'Men''s', 1),
-  (3, 2, 'Men''s', 2),
-  (4, 7, 'Women''s', 3);
+  (2, 5, 1, 1),
+  (3, 2, 1, 2),
+  (4, 7, 2, 3);
 
 INSERT INTO join_tags_inventory(tag_id, inventory_id) VALUES
   (5, 1), (3, 2), (4, 3), (1, 4), (2, 4);
@@ -69,5 +74,6 @@ ALTER SEQUENCE customer_types_id_seq RESTART WITH 1;
 INSERT INTO customer_types(type) VALUES
   ('Staff'), ('Student'), ('Alumni'), ('Public');
 
-INSERT INTO customers(name, user_id, type_id) VALUES
-  ('Alon Dahari', 1, 1), ('Dick Grossweiner', null, 2);
+INSERT INTO customers(name, user_id, type_id, email, student_id, phone_number, address, birth_date) VALUES
+  ('Alon Dahari', 1, 1, 'climbinghobo@gmail.com', null, '5415151548', row('4127 Tejon street', 'Denver', 'CO', 'USA', '80211'), '02/28/1984'),
+  ('Dick Grossweiner', null, 2);
