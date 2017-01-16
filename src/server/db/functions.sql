@@ -11,5 +11,5 @@ LEFT OUTER JOIN brands b ON m.brand_id = b.id
 LEFT OUTER JOIN join_tags_inventory jti ON jti.inventory_id = i.id
 LEFT OUTER JOIN tags t ON jti.tag_id = t.id
 
-WHERE m.name || ' ' || b.name || ' ' || to_tsvector(it.name) || to_tsvector(t.tag) @@ to_tsquery($1);
+WHERE m.name || ' ' || b.name || ' ' || to_tsvector(it.name) || to_tsvector(t.tag) @@ to_tsquery(REPLACE($1, ' ', ' & '));
 $$ LANGUAGE SQL;
