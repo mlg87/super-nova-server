@@ -1,6 +1,25 @@
 -- import gen_random_uuid
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+-- for now we just drop everything so we don't have to keep track of what we altered.
+-- drop in reverse order because of dependencies.
+DROP TABLE join_reservations_inventory;
+DROP TABLE reservations;
+DROP TABLE customers;
+DROP TABLE customer_types;
+DROP TABLE users;
+DROP TABLE join_brands_item_types;
+DROP TABLE join_tags_inventory;
+DROP TABLE inventory;
+DROP TABLE tags;
+DROP TABLE sizes;
+DROP TABLE models;
+DROP TABLE brands;
+DROP TABLE item_types;
+DROP TABLE size_types;
+DROP TABLE categories;
+
+-- we don't drop the types, alter them if needed
 CREATE TYPE address AS (
   street TEXT,
   state CHAR(2),
