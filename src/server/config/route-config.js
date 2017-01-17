@@ -2,6 +2,8 @@
 
   'use strict';
 
+  const router = require('express').Router()
+
   routeConfig.init = function (app) {
 
     // *** routes *** //
@@ -9,7 +11,11 @@
 
     // *** register routes *** //
 
-    app.use('/auth/', routes.auth);
+    router.use('/auth/', routes.auth);
+
+    const prefix = process.env.NODE_ENV == 'development' ? '/api' : ''
+    // use the router on the app
+    app.use(prefix, router)
 
   };
 
