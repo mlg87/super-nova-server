@@ -42,10 +42,11 @@ const authHelpers = {
         });
       } else {
         // check if the user still exists in the db
-        return knex('users').where({id: parseInt(payload.sub)}).first()
+        knex('users').where({id: parseInt(payload.sub)}).first()
         .then((user) => {
           req.user = {id: user.id};
-          next();
+          next()
+          return null
         })
         .catch((err) => {
           res.status(500).json({
