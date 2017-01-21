@@ -106,6 +106,7 @@ CREATE TABLE inventory (
   gender_id INT REFERENCES genders(id),
   -- ASSUMES every model must have a brand
   model_id INT REFERENCES models(id),
+  image_url TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
