@@ -3,7 +3,7 @@ const router = express.Router();
 const authHelpers = require('../helpers/auth');
 const knex = require('../db/connection');
 
-router.post('/register', (req, res, next)  => {
+router.post('/register', (req, res)  => {
   authHelpers.createUser(req)
     .then((user) => { return authHelpers.encodeToken(user[0]); })
     .then((token) => {
@@ -21,7 +21,7 @@ router.post('/register', (req, res, next)  => {
     });
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', (req, res) => {
   const username = req.body.user.username;
   const password = req.body.user.password;
   return knex('users').where({username}).first()
@@ -49,8 +49,8 @@ router.post('/login', (req, res, next) => {
 
 // ** helper routes ** //
 
-router.get('/current_user', authHelpers.checkAuthentication, (req,res) => {
-  knex('users').where({id: parseInt(req.user.id)}).first()
+router.get('/current_user', authHelpers.checkAuthentication, (req, res) => {
+  return knex('users').where({id: parseInt(req.user.id)}).first()
   .then((user) => {
     let result = Object.assign({}, user);
     delete result.password;
