@@ -9,7 +9,7 @@ router.post('/register', (req, res, next)  => {
     .then((token) => {
       res.status(200).json({
         token: token,
-        message: `Success. user has been created.`
+        message: `Success. '${token.username}' has been created.`
       });
     })
     .catch((err) => {
@@ -29,11 +29,17 @@ router.post('/login', (req, res, next) => {
     authHelpers.comparePass(password, user.password);
     return user;
   })
-  .then((user) => { return authHelpers.encodeToken(user); })
-  .then((token) => {
+  .then((user) => {
+    return {
+      token: authHelpers.encodeToken(user),
+      id: user.id
+    }
+  })
+  .then((userInfo) => {
     res.status(200).json({
       message: 'Success',
-      token: token
+      token: userInfo.token,
+      id: userInfo.id
     });
   })
   .catch((err) => {
