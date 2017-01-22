@@ -13,7 +13,9 @@
 
     router.use('/auth/', routes.auth);
 
-    // use the router on the app
+    router.use('/inventory/', routes.inventory);
+
+    // prepend api to everything
     app.use('/api', router)
 
   };
