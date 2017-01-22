@@ -33,7 +33,7 @@ INSERT INTO brands(name) VALUES
 
 ALTER SEQUENCE models_id_seq RESTART WITH 1;
 INSERT INTO models(name, brand_id) VALUES
-  ('Miura', 1), ('Corax', 4), ('Fairpoint 40', 3), ('Aura', 5);
+  ('Miura', 1), ('Corax', 4), ('Fairpoint 40', 3), ('C14', 5);
 
 ALTER SEQUENCE sizes_id_seq RESTART WITH 1;
 INSERT INTO sizes(size, size_type_id) VALUES
@@ -56,10 +56,10 @@ INSERT INTO genders(customer, inventory) VALUES
 
 ALTER SEQUENCE inventory_id_seq RESTART WITH 1;
 INSERT INTO inventory(item_type_id, size_id, gender_id, model_id, image_url) VALUES
-  (1, NULL, NULL, 4, 'https://www.google.com/imgres?imgurl=http%3A%2F%2Feddyline.com%2Fwp-content%2Fuploads%2Fsky10-yellow1.jpg&imgrefurl=http%3A%2F%2Feddyline.com%2F&docid=7rs7fP4vzCHmyM&tbnid=u-eUDZj_tncAYM%3A&vet=1&w=1000&h=350&bih=728&biw=1440&q=eddyline%20kayaks%20Aura&ved=0ahUKEwiT867J5dHRAhXlxVQKHdhMAP0QMwgaKAAwAA&iact=mrc&uact=8'),
-  (2, 5, 1, 1, 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiCoMWp5dHRAhXFjFQKHaxjBzcQjRwIBw&url=http%3A%2F%2Fwww.sportiva.com%2Fmen-s%2Fmen-s-footwear%2Fmiura.html&bvm=bv.144224172,d.cGw&psig=AFQjCNFOhO6CLzrdgK9XNFN5amA2Z63A5g&ust=1485038410342868'),
-  (3, 2, 1, 2, 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwjd7dK55dHRAhXms1QKHVnUA4YQjRwIBw&url=http%3A%2F%2Fwww.backcountry.com%2Fpetzl-corax-ii-harness-mens&bvm=bv.144224172,d.cGw&psig=AFQjCNG7_Qv834dmzW1wgU5pa9zwi91jbA&ust=1485038443905322'),
-  (4, 7, 2, 3, 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.rei.com%2Fmedia%2Fproduct%2F8945620002&imgrefurl=https%3A%2F%2Fwww.rei.com%2Fproduct%2F894562%2Fosprey-farpoint-40-travel-pack&docid=T5jSYbfA4brKgM&tbnid=ECCrqQhxgRgz4M%3A&vet=1&w=358&h=440&bih=728&biw=1440&q=Fairpoint%2040&ved=0ahUKEwiRzc3V5dHRAhVKxFQKHe4BD4oQMwhZKAUwBQ&iact=mrc&uact=8');
+  (1, NULL, NULL, 4, 'http://eddyline.com/wp-content/uploads/c14-yellow.jpg'),
+  (2, 5, 1, 1, 'http://www.sportiva.com/media/catalog/product/cache/1/image/1200x1200/9df78eab33525d08d6e5fb8d27136e95/9/7/971_yel_miura_1_7.jpg'),
+  (3, 2, 1, 2, 'https://www.rei.com/media/product/871097'),
+  (4, 7, 2, 3, 'https://www.rei.com/media/product/894562');
 
 INSERT INTO join_tags_inventory(tag_id, inventory_id) VALUES
   (5, 1), (3, 2), (4, 3), (1, 4), (2, 4);
