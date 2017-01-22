@@ -35,7 +35,7 @@ INSERT INTO brands(name) VALUES
 
 ALTER SEQUENCE models_id_seq RESTART WITH 1;
 INSERT INTO models(name, brand_id) VALUES
-  ('Miura', 1), ('Corax', 4), ('Fairpoint 40', 3), ('Aura', 5);
+  ('Miura', 1), ('Corax', 4), ('Fairpoint 40', 3), ('C14', 5);
 
 ALTER SEQUENCE sizes_id_seq RESTART WITH 1;
 INSERT INTO sizes(size, size_type_id) VALUES
@@ -57,11 +57,11 @@ INSERT INTO genders(customer, inventory) VALUES
   ('Male', 'Men''s'), ('Female', 'Women''s'), (null, 'Kids'), ('Other', null);
 
 ALTER SEQUENCE inventory_id_seq RESTART WITH 1;
-INSERT INTO inventory(item_type_id, size_id, gender_id, model_id) VALUES
-  (1, NULL, NULL, 4),
-  (2, 5, 1, 1),
-  (3, 2, 1, 2),
-  (4, 7, 2, 3);
+INSERT INTO inventory(item_type_id, size_id, gender_id, model_id, image_url) VALUES
+  (1, NULL, NULL, 4, 'http://eddyline.com/wp-content/uploads/c14-yellow.jpg'),
+  (2, 5, 1, 1, 'http://www.sportiva.com/media/catalog/product/cache/1/image/1200x1200/9df78eab33525d08d6e5fb8d27136e95/9/7/971_yel_miura_1_7.jpg'),
+  (3, 2, 1, 2, 'https://www.rei.com/media/product/871097'),
+  (4, 7, 2, 3, 'https://www.rei.com/media/product/894562');
 
 INSERT INTO join_tags_inventory(tag_id, inventory_id) VALUES
   (5, 1), (3, 2), (4, 3), (1, 4), (2, 4);

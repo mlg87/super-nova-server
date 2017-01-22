@@ -1,5 +1,6 @@
 -- get all inventory in a formatted table, accepts a limit
-CREATE OR REPLACE FUNCTION get_inventory(INT)
+DROP FUNCTION get_inventory(INT);
+CREATE FUNCTION get_inventory(INT)
 RETURNS TABLE (
   item_id INT,
   type VARCHAR(50),
@@ -7,11 +8,12 @@ RETURNS TABLE (
   size VARCHAR(40),
   gender VARCHAR(40),
   model VARCHAR(100),
-  brand VARCHAR(100)
+  brand VARCHAR(100),
+  image_url TEXT
 )
 AS $$
 
-SELECT DISTINCT i.id as item_id, it.name as type, i.uuid, s.size, g.inventory AS gender, m.name AS model, b.name AS brand
+SELECT DISTINCT i.id as item_id, it.name as type, i.uuid, s.size, g.inventory AS gender, m.name AS model, b.name AS brand, i.image_url
 FROM inventory i
 JOIN item_types it ON i.item_type_id = it.id
 LEFT OUTER JOIN sizes s ON i.size_id = s.id
@@ -25,7 +27,8 @@ $$ LANGUAGE SQL STABLE;
 -- get inventory by searching through model, brand, type and tags.
 -- Accepts a limit as a second argument.
 -- returns all values if TEXT = ''
-CREATE OR REPLACE FUNCTION search_inventory(TEXT, INT)
+DROP FUNCTION search_inventory(TEXT, INT);
+CREATE FUNCTION search_inventory(TEXT, INT)
 RETURNS TABLE (
   item_id INT,
   type VARCHAR(50),
@@ -33,12 +36,13 @@ RETURNS TABLE (
   size VARCHAR(40),
   gender VARCHAR(40),
   model VARCHAR(100),
-  brand VARCHAR(100)
+  brand VARCHAR(100),
+  image_url TEXT
 )
 AS $$
 
 -- we have to specify the fields again here
-SELECT DISTINCT item_id, type, uuid, size, gender, model, brand FROM get_inventory(null)
+SELECT DISTINCT item_id, type, uuid, size, gender, model, brand, image_url FROM get_inventory(null)
 -- get the tags, although we won't return them, for the search
 LEFT OUTER JOIN join_tags_inventory jti ON jti.inventory_id = item_id
 LEFT OUTER JOIN tags t ON jti.tag_id = t.id
@@ -60,7 +64,8 @@ $$ LANGUAGE SQL STABLE;
 -- we also return last_reservation, thought it might be useful and it makes sorting easier.
 -- if we don't end up using it, we can use CTE instead (WITH a temp expression)
 -- returns all values if TEXT = ''
-CREATE OR REPLACE FUNCTION search_customers(TEXT, INT)
+DROP FUNCTION search_customers(TEXT, INT);
+CREATE FUNCTION search_customers(TEXT, INT)
 RETURNS TABLE (
   customer_id INT,
   first_name VARCHAR(100),
