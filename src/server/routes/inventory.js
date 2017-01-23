@@ -3,7 +3,7 @@ const router = express.Router();
 const knex = require('../db/connection');
 
 router.get('/search', (req, res) => {
-  return knex.raw('SELECT * FROM search_inventory(?, ?)', ['', null])
+  return knex.raw('SELECT * FROM search_inventory(?, ?)', [req.query.searchTerm, null])
   .then((result) => {
     res.status(200).json(result.rows);
   })
