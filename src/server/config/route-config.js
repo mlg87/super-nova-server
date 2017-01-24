@@ -12,6 +12,7 @@
     // *** register routes *** //
 
     router.use('/auth/', routes.auth);
+    router.use('/users/', routes.users)
 
     // use the router on the app
     app.use('/api', router)
