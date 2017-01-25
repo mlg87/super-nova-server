@@ -178,7 +178,7 @@ $$ LANGUAGE SQL;
 DROP FUNCTION search_customers(TEXT, INT);
 CREATE FUNCTION search_customers(TEXT, INT)
 RETURNS TABLE (
-  customer_id INT,
+  id INT,
   first_name VARCHAR(100),
   last_name VARCHAR(100),
   user_id INT,
