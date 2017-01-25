@@ -78,10 +78,8 @@ SELECT DISTINCT
   m.name AS model,
   b.name AS brand,
   first(i.image_url),
-  -- array_agg(r.date_range) as test
   count(CASE WHEN r.date_range && $2 THEN 1 END) as reserved,
   count(*) as total
-  -- (SELECT count(*) WHERE ($2, $3) OVERLAPS (r.start_timestamp, r.end_timestamp)) as reserved
 FROM inventory i
 JOIN item_types it ON i.item_type_id = it.id
 LEFT OUTER JOIN sizes s ON i.size_id = s.id
