@@ -1,3 +1,29 @@
+-- Create a function that always returns the first non-NULL item
+CREATE OR REPLACE FUNCTION public.first_agg ( anyelement, anyelement )
+RETURNS anyelement LANGUAGE SQL IMMUTABLE STRICT AS $$
+        SELECT $1;
+$$;
+
+-- And then wrap an aggregate around it
+CREATE AGGREGATE public.FIRST (
+        sfunc    = public.first_agg,
+        basetype = anyelement,
+        stype    = anyelement
+);
+
+-- Create a function that always returns the last non-NULL item
+CREATE OR REPLACE FUNCTION public.last_agg ( anyelement, anyelement )
+RETURNS anyelement LANGUAGE SQL IMMUTABLE STRICT AS $$
+        SELECT $2;
+$$;
+
+-- And then wrap an aggregate around it
+CREATE AGGREGATE public.LAST (
+        sfunc    = public.last_agg,
+        basetype = anyelement,
+        stype    = anyelement
+);
+
 -- get all inventory in a formatted table, accepts a limit
 DROP FUNCTION get_inventory(INT);
 CREATE FUNCTION get_inventory(INT)
@@ -13,7 +39,15 @@ RETURNS TABLE (
 )
 AS $$
 
-SELECT DISTINCT i.id as item_id, it.name as type, i.uuid, s.size, g.inventory AS gender, m.name AS model, b.name AS brand, i.image_url
+SELECT DISTINCT
+  i.id as item_id,
+  it.name as type,
+  i.uuid,
+  s.size,
+  g.inventory AS gender,
+  m.name AS model,
+  b.name AS brand,
+  i.image_url
 FROM inventory i
 JOIN item_types it ON i.item_type_id = it.id
 LEFT OUTER JOIN sizes s ON i.size_id = s.id
@@ -22,6 +56,43 @@ LEFT OUTER JOIN models m ON i.model_id = m.id
 LEFT OUTER JOIN brands b ON m.brand_id = b.id
 LIMIT $1
 $$ LANGUAGE SQL STABLE;
+
+-- get inventory grouped by model, accepts a starting and end dates for counting
+-- available vs. unavailable gear
+DROP FUNCTION get_grouped_inventory(INT, DATERANGE);
+CREATE FUNCTION get_grouped_inventory(INT, DATERANGE)
+RETURNS TABLE (
+  type VARCHAR(50),
+  gender VARCHAR(40),
+  model VARCHAR(100),
+  brand VARCHAR(100),
+  image_url TEXT,
+  reserved BIGINT,
+  total BIGINT
+)
+AS $$
+
+SELECT DISTINCT
+  it.name as type,
+  g.inventory AS gender,
+  m.name AS model,
+  b.name AS brand,
+  first(i.image_url),
+  -- array_agg(r.date_range) as test
+  count(CASE WHEN r.date_range && $2 THEN 1 END) as reserved,
+  count(*) as total
+  -- (SELECT count(*) WHERE ($2, $3) OVERLAPS (r.start_timestamp, r.end_timestamp)) as reserved
+FROM inventory i
+JOIN item_types it ON i.item_type_id = it.id
+LEFT OUTER JOIN sizes s ON i.size_id = s.id
+LEFT OUTER JOIN genders g ON i.gender_id = g.id
+LEFT OUTER JOIN models m ON i.model_id = m.id
+LEFT OUTER JOIN brands b ON m.brand_id = b.id
+LEFT OUTER JOIN join_reservations_inventory j ON j.item_id = i.id
+LEFT OUTER JOIN reservations r ON j.reservation_id = r.id
+GROUP BY type, gender, model, brand
+LIMIT $1
+$$ LANGUAGE SQL;
 
 
 -- get inventory by searching through model, brand, type and tags.
@@ -77,7 +148,7 @@ RETURNS TABLE (
   phone_number CHAR(10),
   address ADDRESS,
   birth_date DATE,
-  last_reservation TIMESTAMPTZ
+  last_reservation TIMESTAMP
 )
 AS $$
   -- ct is in the GROUP BY, otherwise we'll have to aggregate it.

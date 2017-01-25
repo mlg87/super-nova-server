@@ -1,4 +1,6 @@
 -- we delete tables in reverse order because of fk constraints
+DELETE FROM join_reservations_inventory;
+DELETE FROM reservations;
 DELETE FROM customers;
 DELETE FROM customer_types;
 DELETE FROM users;
@@ -124,3 +126,6 @@ INSERT INTO customers(first_name, last_name, user_id, type_id, gender_id, email,
     row('6660 college st', 'fountain valley', 'AR', 'USA', '85701'),
     '1952-04-07'
   );
+
+insert into reservations(user_id, customer_id, date_range) values(1, 1, '[2017-02-01, 2017-02-03]');
+insert into join_reservations_inventory values(1, 1);
