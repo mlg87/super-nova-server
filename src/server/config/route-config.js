@@ -15,6 +15,8 @@
 
     router.use('/inventory/', routes.inventory);
 
+    router.use('/customers/', routes.customers);
+
     // prepend api to everything
     app.use('/api', router)
 
