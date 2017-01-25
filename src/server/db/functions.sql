@@ -67,7 +67,7 @@ RETURNS TABLE (
   model VARCHAR(100),
   brand VARCHAR(100),
   image_url TEXT,
-  reserved BIGINT,
+  available BIGINT,
   total BIGINT
 )
 AS $$
@@ -78,7 +78,9 @@ SELECT DISTINCT
   m.name AS model,
   b.name AS brand,
   first(i.image_url),
-  count(CASE WHEN r.date_range && $2 THEN 1 END) as reserved,
+  -- when reservation date_range overlaps with date_range provided, don't count it
+  -- so we can present something like 2/10 available in these dates
+  count(CASE WHEN r.date_range && $2 THEN null ELSE 1 END) as available,
   count(*) as total
 FROM inventory i
 JOIN item_types it ON i.item_type_id = it.id
