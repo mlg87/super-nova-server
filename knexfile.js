@@ -4,11 +4,11 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      host : process.env.RDS_HOSTNAME || 'localhost',
-      user : process.env.RDS_USERNAME,
+      host: process.env.RDS_HOSTNAME || 'localhost',
+      user: process.env.RDS_USERNAME,
       password: process.env.RDS_PASSWORD,
       port: process.env.RDS_PORT || '5432',
-      database : databaseName
+      database: databaseName
     },
     migrations: {
       directory: __dirname + '/src/server/db/migrations'

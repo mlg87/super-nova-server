@@ -14,7 +14,7 @@ chai.use(chaiHttp);
 const server = require('../../../src/server/app');
 
 const tests = () => {
-  describe('auth/register', () => {
+  describe('/api/auth/register', () => {
 
     describe('errors', () => {
 
@@ -30,7 +30,7 @@ const tests = () => {
 
       it('should throw error if username is not 6 or more characters', (done) => {
         chai.request(server)
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({
           user: {
             username: '',
@@ -50,7 +50,7 @@ const tests = () => {
 
       before((done) => {
         chai.request(server)
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({
           user: {
             username: 'user123',

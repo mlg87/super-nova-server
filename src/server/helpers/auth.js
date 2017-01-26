@@ -29,6 +29,7 @@ const authHelpers = {
   },
 
   checkAuthentication(req, res, next) {
+    console.log(req.headers.authorization);
     if (!(req.headers && req.headers.authorization)) {
       return res.status(400).json({
         message: 'Please log in'
@@ -47,8 +48,7 @@ const authHelpers = {
         knex('users').where({id: parseInt(payload.sub)}).first()
         .then((user) => {
           req.user = {id: user.id};
-          next()
-          return null
+          next();
         })
         .catch((err) => {
           res.status(500).json({
