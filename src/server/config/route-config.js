@@ -12,6 +12,7 @@
     // *** register routes *** //
 
     router.use('/auth/', routes.auth);
+    router.use('/users/', routes.users)
     router.use('/inventory/', routes.inventory);
     router.use('/customers/', routes.customers);
     router.use('/reservations/', routes.reservations);

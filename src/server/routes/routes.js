@@ -1,6 +1,7 @@
 module.exports = {
   auth: require('./auth'),
-  inventory: require('./inventory'),
   customers: require('./customers'),
   reservations: require('./reservations')
+  users: require('./users'),
+  inventory: require('./inventory')
 };
