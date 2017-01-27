@@ -22,7 +22,7 @@ router.post('/add', (req, res) => {
       .then((reservation_ids) => {
         const reservation_id = reservation_ids[0]
         const promises = inventory_ids.map((id) => {
-          return trx.insert({item_id: id, reservation_id})
+          return trx.insert({reservation_id})
             .into('join_reservations_inventory')
         })
         return Promise.all(promises)
@@ -31,7 +31,7 @@ router.post('/add', (req, res) => {
         res.status(200)
       })
       .catch((err) => {
-        res.status(400).json(err)
+        res.status(400)
       })
 
   })
