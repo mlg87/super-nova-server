@@ -21,8 +21,8 @@ router.post('/add', (req, res) => {
       .into('reservations')
       .then((reservation_ids) => {
         const reservation_id = reservation_ids[0]
-        const promises = inventory_ids.map((id) => {
-          return trx.insert({reservation_id})
+        const promises = inventory_ids.map((item_id) => {
+          return trx.insert({reservation_id, item_id})
             .into('join_reservations_inventory')
         })
         return Promise.all(promises)
