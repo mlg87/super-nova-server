@@ -186,7 +186,10 @@ RETURNS TABLE (
   type VARCHAR(50),
   student_id VARCHAR(50),
   phone_number CHAR(10),
-  address ADDRESS,
+  street TEXT,
+  city VARCHAR(100),
+  state CHAR(2),
+  zip_code VARCHAR(10),
   birth_date DATE,
   last_reservation TIMESTAMPTZ,
   image_url TEXT
@@ -202,14 +205,22 @@ AS $$
     ct.type,
     c.student_id,
     c.phone_number,
-    c.address,
+    (c.address).street,
+    (c.address).city,
+    (c.address).state,
+    (c.address).zip_code,
     c.birth_date,
     MAX(r.created_at) as last_reservation,
     c.image_url
   FROM customers c
   JOIN customer_types ct ON c.type_id = ct.id
   LEFT OUTER JOIN reservations r ON r.customer_id = c.id
-  WHERE $1 = '' OR lower($1) IN (lower(first_name), lower(last_name), lower(email), phone_number)
+  WHERE (
+    COALESCE(lower(first_name), ' ')
+    || ' ' || COALESCE(lower(last_name), ' ')
+    || ' ' || COALESCE(lower(email), ' ')
+    || ' ' || COALESCE(phone_number, ' ')
+  ) LIKE '%' || lower($1) || '%'
   GROUP BY c.id, ct.type
   ORDER BY last_reservation
   LIMIT $2

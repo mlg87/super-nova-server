@@ -100,7 +100,7 @@ VALUES
     'climbinghobo@gmail.com',
     null,
     '5415151548',
-    row('4127 Tejon street', 'Denver', 'CO', 'USA', '80211'),
+    row('4127 Tejon street', 'Denver', 'CO', '80211'),
     '1984-02-28',
     'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAiuAAAAJDMwNDJlMmY4LTQ4MGQtNGM1ZC05MzNhLWVlYThhYzdkMTAyMA.jpg'
   ),
@@ -113,7 +113,7 @@ VALUES
     'dick69@gmail.com',
     'M-12345',
     '9384628463',
-    row('9612 sunset st', 'pembroke pines', 'LA', 'USA', '18332'),
+    row('9612 sunset st', 'pembroke pines', 'LA', '18332'),
     '1982-11-13',
     'http://www.celebrityaccess.com/news/grafix/lennykalikowmain.jpg'
   ),
@@ -126,7 +126,7 @@ VALUES
     'vicki.mitchell@example.com',
     'M-74533',
     '5879055543',
-    row('5649 central st', 'clearwater', 'OR', 'USA', '78937'),
+    row('5649 central st', 'clearwater', 'OR', '78937'),
     '1985-10-11',
     'https://pbs.twimg.com/profile_images/599692029224943617/oM8pNg55_400x400.jpg'
   ),
@@ -139,7 +139,7 @@ VALUES
     'todd.perez@example.com',
     null,
     '7460923497',
-    row('6660 college st', 'fountain valley', 'AR', 'USA', '85701'),
+    row('6660 college st', 'fountain valley', 'AR', '85701'),
     '1952-04-07',
     'http://www.homefacts.com/images/offenders/california/thumb/18614023D273420161112.jpg'
   );

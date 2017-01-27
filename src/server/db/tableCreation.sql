@@ -8,8 +8,7 @@ DROP TABLE reservations;
 DROP TABLE customers;
 DROP TABLE customer_types;
 DROP TABLE users;
-DROP TABLE join_brands_item_types;
-DROP TABLE join_tags_inventory;
+DROP TABLE join_tags_models;
 DROP TABLE inventory;
 DROP TABLE tags;
 DROP TABLE sizes;
@@ -26,7 +25,6 @@ CREATE TYPE address AS (
   street TEXT,
   city VARCHAR(100),
   state CHAR(2),
-  country VARCHAR(50),
   zip_code VARCHAR(10)
 );
 
