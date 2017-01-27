@@ -28,7 +28,7 @@ router.post('/add', (req, res) => {
         return Promise.all(promises)
       })
       .then((inserts) => {
-        res.status(200).json(inserts)
+        res.status(200)
       })
       .catch((err) => {
         res.status(400).json(err)
