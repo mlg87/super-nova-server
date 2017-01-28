@@ -22,4 +22,4 @@ module.exports = {
       .where('id', id)
       .del();
   }
-}
+};
