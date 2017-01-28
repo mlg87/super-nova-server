@@ -8,8 +8,8 @@ router.all('*', authHelpers.checkAuthentication);
 
 router.get('/', (req, res, next) => {
   sizeTypesHelpers.getAll()
-  .then((categories) => {
-    res.status(200).json({data: categories});
+  .then((sizeTypes) => {
+    res.status(200).json({data: sizeTypes});
   })
   .catch((err) => {
     res.status(500).json('There was an error retrieving the size types.');
@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  const name = req.body.category;
+  const name = req.body.name;
   sizeTypesHelpers.addOne(name)
   .then((result) => {
     res.status(200).json({data: 'Created new size type'});
