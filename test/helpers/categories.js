@@ -78,7 +78,7 @@ const tests = () => {
 
     });
 
-    xdescribe('editOne', () => {
+    describe('editOne', () => {
       let id;
       beforeEach((done) => {
         knex('categories').del()
@@ -86,19 +86,14 @@ const tests = () => {
           knex('categories')
           .returning('id')
           .insert([{name: 'Test'}])
+          .should.be.fulfilled
           .then((res) => {
             // insert is successful it will return an array of ids
             expect(res).to.be.a.array;
             id = res[0];
             done();
-          })
-          .catch((err) => {
-            // this will throw an error if we get in here
-            expect(err).to.be.undefined;
-            done();
           });
         });
-
       });
 
       it('should edit a category', (done) => {
@@ -127,8 +122,8 @@ const tests = () => {
           });
         });
       });
-
     });
+
   });
 };
 
