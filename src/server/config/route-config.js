@@ -17,6 +17,7 @@
     router.use('/auth/', routes.auth);
     router.use('/users/', routes.users);
     router.use('/categories/', routes.categories);
+    router.use('/size_types/', routes.size_types);
     router.use('/inventory/', routes.inventory);
     router.use('/customers/', routes.customers);
     router.use('/reservations/', routes.reservations);
