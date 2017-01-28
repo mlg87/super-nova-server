@@ -9,6 +9,17 @@ module.exports = {
 
   addOne: (name) => {
     return knex('categories').insert({name});
-  }
+  },
 
+  editOne: (id, newName) => {
+    return knex('categories')
+      .where('id', id)
+      .update({name: newName});
+  },
+
+  deleteOne: (id) => {
+    return knex('categories')
+      .where('id', id)
+      .del();
+  }
 }
