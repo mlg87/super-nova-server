@@ -29,7 +29,6 @@ const authHelpers = {
   },
 
   checkAuthentication(req, res, next) {
-    console.log(req.headers.authorization);
     if (!(req.headers && req.headers.authorization)) {
       return res.status(400).json({
         message: 'Please log in'

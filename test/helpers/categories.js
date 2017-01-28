@@ -4,12 +4,21 @@
 
 const knex = require('../../src/server/db/connection');
 const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const should = chai.should();
 const expect = chai.expect;
 
+chai.use(chaiAsPromised);
+
 const categories = require(
   '../../src/server/helpers/categories');
+
+const categoriesFixture = [
+  {name: 'Boats'},
+  {name: 'Camping'},
+  {name: 'Climbing'}
+];
 
 const tests = () => {
   describe('categories helpers', () => {
@@ -18,12 +27,22 @@ const tests = () => {
     });
 
     describe('getAll', () => {
-      it('should get an array of categories', (done) => {
-        categories.getAll()
+
+      before((done) => {
+        knex('categories').del()
         .then((result) => {
-          expect(result).to.be.a.array;
-          done();
+          knex('categories')
+          .insert(categoriesFixture).then(() => {
+            done();
+          });
         });
+      });
+
+      it('should get an array of categories', (done) => {
+        let getAllPromise = categories.getAll();
+        getAllPromise.should.eventually.be.a.array;
+        getAllPromise.should.eventually.have.length(3);
+        done();
       });
     });
 
@@ -37,8 +56,8 @@ const tests = () => {
 
       it('should create a category', (done) => {
         categories.addOne('Test')
-        .then(() => {
-          return knex('categories').select().where({name: 'Test'});
+        .then((res) => {
+          return knex('categories').select().where({id: res[0]});
         })
         .then((result) => {
           expect(result[0]).to.have.property('id');
@@ -49,13 +68,9 @@ const tests = () => {
       });
 
       it('it should not allow duplicate names', (done) => {
-        categories.addOne('Test')
-        .then((result) => {
-          console.log('result', result);
-          expect(result).to.equal('This should not be called');
-          done();
-        })
-        .catch((err) => {
+        addOnePromise = categories.addOne('Test');
+        addOnePromise.should.be.rejected
+        .then((err) => {
           expect(err.detail).to.equal('Key (name)=(Test) already exists.');
           done();
         });
@@ -63,7 +78,7 @@ const tests = () => {
 
     });
 
-    describe('editOne', () => {
+    xdescribe('editOne', () => {
       let id;
       beforeEach((done) => {
         knex('categories').del()
@@ -104,14 +119,10 @@ const tests = () => {
         knex('categories').insert([{name: duplicateName}])
         .then(() => {
           categories.editOne(id, duplicateName)
-          .then((result) => {
-            console.log('result', result);
-            expect(result).to.equal('This should not be called');
-            done();
-          })
-          .catch((err) => {
+          .should.be.rejected
+          .then((err) => {
             expect(err.detail)
-              .to.equal(`Key (name)=(${duplicateName}) already exists.`);
+            .to.equal(`Key (name)=(${duplicateName}) already exists.`);
             done();
           });
         });

@@ -8,7 +8,9 @@ module.exports = {
   },
 
   addOne: (name) => {
-    return knex('categories').insert({name});
+    return knex('categories')
+    .returning('id')
+    .insert({name});
   },
 
   editOne: (id, newName) => {
