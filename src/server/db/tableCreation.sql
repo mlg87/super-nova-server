@@ -8,8 +8,7 @@ DROP TABLE reservations;
 DROP TABLE customers;
 DROP TABLE customer_types;
 DROP TABLE users;
-DROP TABLE join_brands_item_types;
-DROP TABLE join_tags_inventory;
+DROP TABLE join_tags_models;
 DROP TABLE inventory;
 DROP TABLE tags;
 DROP TABLE sizes;
@@ -26,7 +25,6 @@ CREATE TYPE address AS (
   street TEXT,
   city VARCHAR(100),
   state CHAR(2),
-  country VARCHAR(50),
   zip_code VARCHAR(10)
 );
 
@@ -73,7 +71,11 @@ CREATE TABLE brands (
 CREATE TABLE models (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
+  item_type_id INT REFERENCES item_types(id) NOT NULL,
   brand_id INT REFERENCES brands(id),
+  -- gender can be null
+  gender_id INT REFERENCES genders(id),
+  image_url TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(name, brand_id)
@@ -97,27 +99,19 @@ CREATE TABLE tags (
 
 CREATE TABLE inventory (
   id SERIAL PRIMARY KEY,
-  item_type_id INT REFERENCES item_types(id) NOT NULL,
   -- item description, will inherit from the item type if null.
   description TEXT,
   uuid VARCHAR(50) NOT NULL UNIQUE,
   size_id INT REFERENCES sizes(id),
-  -- gender can be null
-  gender_id INT REFERENCES genders(id),
   -- ASSUMES every model must have a brand
-  model_id INT REFERENCES models(id),
+  model_id INT REFERENCES models(id) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE join_tags_inventory (
+CREATE TABLE join_tags_models (
   tag_id INT NOT NULL REFERENCES tags(id),
-  inventory_id INT NOT NULL REFERENCES inventory(id)
-);
-
-CREATE TABLE join_brands_item_types (
-  brand_id INT  NOT NULL REFERENCES brands(id),
-  item_type_id INT  NOT NULL REFERENCES item_types(id)
+  model_id INT NOT NULL REFERENCES inventory(id)
 );
 
 CREATE TABLE users (
@@ -149,6 +143,7 @@ CREATE TABLE customers (
   phone_number CHAR(10) UNIQUE CHECK(phone_number ~ '[0-9]{10}'),
   address ADDRESS,
   birth_date DATE,
+  image_url TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -157,8 +152,7 @@ CREATE TABLE reservations (
   id SERIAL PRIMARY KEY,
   customer_id INT REFERENCES customers(id) NOT NULL,
   user_id INT REFERENCES users(id) NOT NULL,
-  start_timestamp TIMESTAMPTZ NOT NULL,
-  end_timestamp TIMESTAMPTZ NOT NULL,
+  date_range TSTZRANGE NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
