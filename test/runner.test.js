@@ -4,6 +4,7 @@ const authHelpers = require('./helpers/auth');
 const categoriesHelpers = require('./helpers/categories');
 const sizeTypesHelpers = require('./helpers/size-types');
 const itemTypesHelpers = require('./helpers/item-types');
+const brandsHelpers = require('./helpers/brands');
 
 const testRunner = Promise.resolve();
 
@@ -14,6 +15,7 @@ testRunner.then(() => {
   // authHelpers();
   // categoriesHelpers();
   // sizeTypesHelpers();
-  itemTypesHelpers();
+  // itemTypesHelpers();
+  brandsHelpers();
 
 });

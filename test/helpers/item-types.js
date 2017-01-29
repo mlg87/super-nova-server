@@ -171,9 +171,6 @@ const tests = () => {
         .should.be.fulfilled
         .then((result) => {
           itemFromDb = result;
-        })
-        .catch((err) => {
-          console.log(err);
         });
       });
 
