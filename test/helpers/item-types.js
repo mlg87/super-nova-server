@@ -134,6 +134,32 @@ const tests = () => {
         });
       });
     });
+
+    describe('editOne', () => {
+
+      let itemFromDb;
+
+      before(() => {
+        return knex('item_types').select().first()
+        .should.be.fulfilled
+        .then((result) => {
+          itemFromDb = result;
+        });
+      });
+
+      it('should edit an item_type in the db', () => {
+        itemFromDb.name = 'New Name';
+        return itemTypes.editOne(itemFromDb)
+        .should.be.fulfilled
+        .then(() => {
+          return knex('item_types').select().where('id', itemFromDb.id).first();
+        })
+        .then((item) => {
+          item.created_at.should.deep.equal(itemFromDb.created_at);
+          item.name.should.equal('New Name');
+        });
+      });
+    });
   });
 };
 

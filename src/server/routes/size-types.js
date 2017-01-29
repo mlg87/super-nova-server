@@ -28,7 +28,7 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/', (req, res, next) => {
-  const id = req.body.name;
+  const id = req.body.id;
   const newName = req.body.name;
   sizeTypesHelpers.editOne(id, newName)
   .then(() => res.status(200).json({data: `Edited size type`}))

@@ -15,6 +15,10 @@ module.exports = {
   // }
   addOne: (itemTypeObject) => {
     return knex(table).insert(itemTypeObject);
+  },
+
+  editOne: (itemTypeObject) => {
+    return knex(table).update(itemTypeObject).where('id', itemTypeObject.id);
   }
 
 };

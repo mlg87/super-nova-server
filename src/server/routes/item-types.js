@@ -16,4 +16,30 @@ router.get('/', (req, res, next) => {
   });
 });
 
+router.post('/', (req, res, next) => {
+  const itemTypeObject = req.body.itemType;
+  itemTypesHelpers.addOne(itemTypeObject)
+  .then((result) => {
+    res.status(200).json({data: 'Created new item type'});
+  })
+  .catch((err) => {
+    res.status(500).json({err: err});
+  });
+});
+
+router.put('/', (req, res, next) => {
+  const id = req.body.id;
+  const itemTypeObject = req.body.itemType;
+  itemTypesHelpers.editOne(id, itemTypeObject)
+  .then(() => res.status(200).json({data: `Edited item type`}))
+  .catch((err) => res.status(500).json({err: err}));
+});
+
+router.delete('/', (req, res, next) => {
+  const id = req.body.id;
+  itemTypesHelpers.deleteOne(id)
+  .then(() => res.status(200).json({data: `Deleted item type`}))
+  .catch((err) => res.status(500).json({err: err}));
+});
+
 module.exports = router;
