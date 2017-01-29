@@ -159,6 +159,43 @@ const tests = () => {
           item.name.should.equal('New Name');
         });
       });
+
+    });
+
+    describe('deleteOne', () => {
+
+      let itemFromDb;
+
+      before(() => {
+        return knex('item_types').select().first()
+        .should.be.fulfilled
+        .then((result) => {
+          itemFromDb = result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      });
+
+      it('should not delete if no id is passed', () => {
+        return itemTypes.deleteOne()
+        .should.be.rejectedWith('no id supplied');
+      });
+
+      it('should not delete if the argument is not a number', () => {
+        return itemTypes.deleteOne(['id'])
+        .should.be.rejected;
+      });
+
+      it('should remove an item_type', () => {
+        return itemTypes.deleteOne(itemFromDb.id)
+        .should.be.fulfilled
+        .then(() => {
+          return knex('item_type').select().where('id', itemFromDb.id)
+          .should.be.rejected;
+        });
+      });
+
     });
   });
 };

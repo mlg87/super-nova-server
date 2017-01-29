@@ -19,6 +19,13 @@ module.exports = {
 
   editOne: (itemTypeObject) => {
     return knex(table).update(itemTypeObject).where('id', itemTypeObject.id);
+  },
+
+  deleteOne: (id) => {
+    if (!id) {
+      return Promise.reject('no id supplied');
+    }
+    return knex(table).del().where('id', id);
   }
 
 };

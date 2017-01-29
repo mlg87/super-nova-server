@@ -108,6 +108,7 @@ const tests = () => {
           .should.equal(`Key (name)=(${duplicateName}) already exists.`);
         });
       });
+
     });
 
   });

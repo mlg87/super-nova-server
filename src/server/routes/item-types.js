@@ -28,9 +28,8 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/', (req, res, next) => {
-  const id = req.body.id;
   const itemTypeObject = req.body.itemType;
-  itemTypesHelpers.editOne(id, itemTypeObject)
+  itemTypesHelpers.editOne(itemTypeObject)
   .then(() => res.status(200).json({data: `Edited item type`}))
   .catch((err) => res.status(500).json({err: err}));
 });
