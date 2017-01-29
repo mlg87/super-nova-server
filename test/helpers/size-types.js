@@ -11,8 +11,8 @@ const expect = chai.expect;
 
 chai.use(chaiAsPromised);
 
-const sizeTypes = require(
-  '../../src/server/helpers/size-types');
+const sizeTypes =
+  require('../../src/server/helpers/size-types');
 
 const sizeTypesFixture =
   require('../fixtures/size-types');
@@ -20,39 +20,32 @@ const sizeTypesFixture =
 const tests = () => {
   describe('sizeTypes helpers', () => {
 
-    describe('errors', () => {
-    });
-
     describe('getAll', () => {
 
-      before((done) => {
-        knex('size_types').del()
-        .then((result) => {
-          knex('size_types')
-          .insert(sizeTypesFixture).then(() => {
-            done();
-          });
+      before(() => {
+        return knex('size_types').del()
+        .then(() => {
+          return knex('size_types')
+          .insert(sizeTypesFixture)
+          .should.be.fulfilled;
         });
       });
 
-      it('should get an array of sizeTypes', (done) => {
-        let getAllPromise = sizeTypes.getAll();
-        getAllPromise.should.eventually.be.a.array;
-        getAllPromise.should.eventually.have.length(3);
-        done();
+      it('should get an array of size_types', () => {
+        return sizeTypes.getAll()
+        .should.eventually.have.length(3);
       });
     });
 
     describe('addOne', () => {
-      before((done) => {
-        knex('size_types').del()
-        .then((result) => {
-          done();
-        });
+      before(() => {
+        return knex('size_types').del()
+        .should.be.fulfilled;
       });
 
-      it('should create a category', (done) => {
-        sizeTypes.addOne('Test')
+      it('should create a size_type', () => {
+        return sizeTypes.addOne('Test')
+        .should.be.fulfilled
         .then((res) => {
           return knex('size_types').select().where({id: res[0]});
         })
@@ -60,16 +53,14 @@ const tests = () => {
           expect(result[0]).to.have.property('id');
           expect(result[0]).to.have.property('created_at');
           expect(result[0].name).to.equal('Test');
-          done();
         });
       });
 
-      it('it should not allow duplicate names', (done) => {
-        addOnePromise = sizeTypes.addOne('Test');
-        addOnePromise.should.be.rejected
+      it('it should not allow duplicate names', () => {
+        return sizeTypes.addOne('Test')
+        .should.be.rejected
         .then((err) => {
           expect(err.detail).to.equal('Key (name)=(Test) already exists.');
-          done();
         });
       });
 
@@ -77,24 +68,23 @@ const tests = () => {
 
     describe('editOne', () => {
       let id;
-      beforeEach((done) => {
-        knex('size_types').del()
+
+      beforeEach(() => {
+        return knex('size_types').del()
         .then((result) => {
-          knex('size_types')
+          return knex('size_types')
           .returning('id')
-          .insert([{name: 'Test'}])
-          .should.be.fulfilled
-          .then((res) => {
-            // insert is successful it will return an array of ids
-            expect(res).to.be.a.array;
-            id = res[0];
-            done();
-          });
+          .insert([{name: 'Test'}]);
+        })
+        .then((res) => {
+          // insert is successful it will return an array of ids
+          res.should.be.a.array;
+          id = res[0];
         });
       });
 
-      it('should edit a category', (done) => {
-        sizeTypes.editOne(id, 'New Name')
+      it('should edit a size_type', () => {
+        return sizeTypes.editOne(id, 'New Name')
         .then(() => {
           return knex('size_types').select().where({id: id});
         })
@@ -102,21 +92,20 @@ const tests = () => {
           expect(result[0]).to.have.property('id');
           expect(result[0]).to.have.property('created_at');
           expect(result[0].name).to.equal('New Name');
-          done();
         });
       });
 
-      it('it should not allow duplicate names', (done) => {
+      it('it should not allow duplicate names', () => {
         const duplicateName = 'Helmets';
-        knex('size_types').insert([{name: duplicateName}])
+
+        return knex('size_types').insert([{name: duplicateName}])
         .then(() => {
-          sizeTypes.editOne(id, duplicateName)
-          .should.be.rejected
-          .then((err) => {
-            expect(err.detail)
-            .to.equal(`Key (name)=(${duplicateName}) already exists.`);
-            done();
-          });
+          return sizeTypes.editOne(id, duplicateName);
+        })
+        .should.be.rejected
+        .then((err) => {
+          err.detail
+          .should.equal(`Key (name)=(${duplicateName}) already exists.`);
         });
       });
     });

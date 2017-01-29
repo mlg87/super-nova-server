@@ -18,9 +18,6 @@ chai.use(chaiAsPromised);
 const tests = () => {
   describe('categories helpers', () => {
 
-    describe('errors', () => {
-    });
-
     describe('getAll', () => {
 
       before(() => {
@@ -100,6 +97,7 @@ const tests = () => {
 
       it('it should not allow duplicate names', () => {
         const duplicateName = 'Helmets';
+
         return knex('categories').insert([{name: duplicateName}])
         .then(() => {
           return categories.editOne(id, duplicateName);

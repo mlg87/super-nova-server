@@ -12,7 +12,7 @@ testRunner.then(() => {
   // categoryRoutes();
   // authRoutes();
   // authHelpers();
-  categoriesHelpers();
+  // categoriesHelpers();
   // sizeTypesHelpers();
   itemTypesHelpers();
 

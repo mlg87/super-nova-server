@@ -1,5 +1,5 @@
 module.exports = [
-  {name: 'Shoes'},
-  {name: 'Pants'},
+  {name: 'Generic(S-M-L)'},
+  {name: 'Height(cm)'},
   {name: 'Volume'}
 ];

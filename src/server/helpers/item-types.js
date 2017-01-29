@@ -1,4 +1,4 @@
-const knex = require('../db/connection')
+const knex = require('../db/connection');
 
 module.exports = {
 
@@ -6,4 +6,4 @@ module.exports = {
     return knex.select().from('item_types');
   }
 
-}
+};
