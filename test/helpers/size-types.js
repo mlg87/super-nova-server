@@ -14,11 +14,8 @@ chai.use(chaiAsPromised);
 const sizeTypes = require(
   '../../src/server/helpers/size-types');
 
-const sizeTypesFixture = [
-  {name: 'Shoes'},
-  {name: 'Pants'},
-  {name: 'Volume'}
-];
+const sizeTypesFixture =
+  require('../fixtures/size-types');
 
 const tests = () => {
   describe('sizeTypes helpers', () => {

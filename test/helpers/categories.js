@@ -8,17 +8,12 @@ const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const should = chai.should();
 const expect = chai.expect;
+const categories =
+  require('../../src/server/helpers/categories');
+const categoriesFixture =
+  require('../fixtures/categories');
 
 chai.use(chaiAsPromised);
-
-const categories = require(
-  '../../src/server/helpers/categories');
-
-const categoriesFixture = [
-  {name: 'Boats'},
-  {name: 'Camping'},
-  {name: 'Climbing'}
-];
 
 const tests = () => {
   describe('categories helpers', () => {
@@ -28,21 +23,18 @@ const tests = () => {
 
     describe('getAll', () => {
 
-      before((done) => {
-        knex('categories').del()
+      before(() => {
+        return knex('categories').del()
         .then((result) => {
-          knex('categories')
-          .insert(categoriesFixture).then(() => {
-            done();
-          });
+          return knex('categories')
+          .insert(categoriesFixture)
+          .should.be.fulfilled;
         });
       });
 
-      it('should get an array of categories', (done) => {
-        let getAllPromise = categories.getAll();
-        getAllPromise.should.eventually.be.a.array;
-        getAllPromise.should.eventually.have.length(3);
-        done();
+      it('should get an array of categories', () => {
+        return categories.getAll()
+        .should.eventually.have.length(3);
       });
     });
 
@@ -54,8 +46,9 @@ const tests = () => {
         });
       });
 
-      it('should create a category', (done) => {
-        categories.addOne('Test')
+      it('should create a category', () => {
+        return categories.addOne('Test')
+        .should.be.fulfilled
         .then((res) => {
           return knex('categories').select().where({id: res[0]});
         })
@@ -63,16 +56,14 @@ const tests = () => {
           expect(result[0]).to.have.property('id');
           expect(result[0]).to.have.property('created_at');
           expect(result[0].name).to.equal('Test');
-          done();
         });
       });
 
-      it('it should not allow duplicate names', (done) => {
-        addOnePromise = categories.addOne('Test');
-        addOnePromise.should.be.rejected
+      it('it should not allow duplicate names', () => {
+        return categories.addOne('Test')
+        .should.be.rejected
         .then((err) => {
           expect(err.detail).to.equal('Key (name)=(Test) already exists.');
-          done();
         });
       });
 
@@ -80,24 +71,23 @@ const tests = () => {
 
     describe('editOne', () => {
       let id;
-      beforeEach((done) => {
-        knex('categories').del()
+
+      beforeEach(() => {
+        return knex('categories').del()
         .then((result) => {
-          knex('categories')
+          return knex('categories')
           .returning('id')
-          .insert([{name: 'Test'}])
-          .should.be.fulfilled
-          .then((res) => {
-            // insert is successful it will return an array of ids
-            expect(res).to.be.a.array;
-            id = res[0];
-            done();
-          });
+          .insert([{name: 'Test'}]);
+        })
+        .then((res) => {
+          // insert is successful it will return an array of ids
+          res.should.be.a.array;
+          id = res[0];
         });
       });
 
-      it('should edit a category', (done) => {
-        categories.editOne(id, 'New Name')
+      it('should edit a category', () => {
+        return categories.editOne(id, 'New Name')
         .then(() => {
           return knex('categories').select().where({id: id});
         })
@@ -105,21 +95,19 @@ const tests = () => {
           expect(result[0]).to.have.property('id');
           expect(result[0]).to.have.property('created_at');
           expect(result[0].name).to.equal('New Name');
-          done();
         });
       });
 
-      it('it should not allow duplicate names', (done) => {
+      it('it should not allow duplicate names', () => {
         const duplicateName = 'Helmets';
-        knex('categories').insert([{name: duplicateName}])
+        return knex('categories').insert([{name: duplicateName}])
         .then(() => {
-          categories.editOne(id, duplicateName)
-          .should.be.rejected
-          .then((err) => {
-            expect(err.detail)
-            .to.equal(`Key (name)=(${duplicateName}) already exists.`);
-            done();
-          });
+          return categories.editOne(id, duplicateName);
+        })
+        .should.be.rejected
+        .then((err) => {
+          err.detail
+          .should.equal(`Key (name)=(${duplicateName}) already exists.`);
         });
       });
     });
