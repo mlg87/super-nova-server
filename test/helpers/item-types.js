@@ -14,7 +14,11 @@ chai.use(chaiAsPromised);
 const itemTypes =
   require('../../src/server/helpers/item-types');
 
-const {categoriesFixture, sizeTypesFixture, itemTypesFixture} = require('../fixtures/index');
+const {
+  categoriesFixture,
+  sizeTypesFixture,
+  itemTypesFixture
+} = require('../fixtures/index');
 
 const tests = () => {
   describe('itemTypes helpers', () => {
@@ -22,8 +26,9 @@ const tests = () => {
     let categoriesInDb;
     let sizeTypesInDb;
     let itemsWithIds;
+    let itemType;
 
-    beforeEach(() => {
+    before(() => {
       return Promise.all([
         knex('item_types').del(),
         knex('categories').del(),
@@ -32,8 +37,12 @@ const tests = () => {
       .should.be.fulfilled
       .then(() => {
         return Promise.all([
-          knex('categories').returning(['id', 'name']).insert(categoriesFixture),
-          knex('size_types').returning(['id', 'name']).insert(sizeTypesFixture)
+          knex('categories')
+            .returning(['id', 'name'])
+            .insert(categoriesFixture),
+          knex('size_types')
+            .returning(['id', 'name'])
+            .insert(sizeTypesFixture)
         ]);
       })
       .should.be.fulfilled
@@ -49,9 +58,24 @@ const tests = () => {
         });
       })
       .then(() => {
+        itemType = {
+          name: 'Test Item Type',
+          category_id: categoriesInDb[0].id,
+          size_type_id: sizeTypesInDb[0].id,
+          description: 'great description'
+        };
         return knex('item_types').insert(itemsWithIds)
         .should.be.fulfilled;
       });
+    });
+
+    after(() => {
+      return Promise.all([
+        knex('item_types').del(),
+        knex('categories').del(),
+        knex('size_types').del()
+      ])
+      .should.be.fulfilled;
     });
 
     describe('getAll itemTypes', () => {
@@ -59,6 +83,55 @@ const tests = () => {
         return itemTypes.getAll()
         .should.be.fulfilled.and
         .should.eventually.have.length(3);
+      });
+    });
+
+    describe('addOne itemType', () => {
+
+      it('should not allow a nonexistant category id be inserted', () => {
+        const badCategoryId = Object.assign({}, itemType);
+        badCategoryId.category_id = 1000;
+        return itemTypes.addOne(badCategoryId)
+        .should.be.rejected
+        .then((err) => {
+          err.detail.should
+          .equal('Key (category_id)=(1000) is not present in table "categories".');
+        });
+      });
+
+      it('should not allow a nonexistant size_type id be inserted', () => {
+        const badSizeTypeId = Object.assign({}, itemType);
+        badSizeTypeId.size_type_id = 1000;
+        return itemTypes.addOne(badSizeTypeId)
+        .should.be.rejected
+        .then((err) => {
+          err.detail.should
+          .equal('Key (size_type_id)=(1000) is not present in table "size_types".');
+        });
+      });
+
+      it('should add one item-type', () => {
+        return itemTypes.addOne(itemType)
+        .should.be.fulfilled
+        .then(() => {
+          return knex('item_types')
+          .select(Object.keys(itemType))
+          .where('name', itemType.name)
+          .first();
+        })
+        .should.be.fulfilled
+        .then((itemFromDb) => {
+          itemFromDb.should.deep.equal(itemType);
+        });
+      });
+
+      it('should not allow a duplicate name', () => {
+        return itemTypes.addOne(itemType)
+        .should.be.rejected
+        .then((err) => {
+          err.detail.should
+          .equal('Key (name)=(Test Item Type) already exists.');
+        });
       });
     });
   });

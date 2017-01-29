@@ -11,4 +11,4 @@ module.exports = [
     name: 'Back Pack',
     description: 'pack it in, pack it out'
   }
-]
+];
