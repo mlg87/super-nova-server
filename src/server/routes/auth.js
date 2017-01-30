@@ -33,7 +33,7 @@ router.post('/login', (req, res) => {
     return {
       token: authHelpers.encodeToken(user),
       id: user.id
-    }
+    };
   })
   .then((userInfo) => {
     res.status(200).json({

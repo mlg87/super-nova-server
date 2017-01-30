@@ -2,8 +2,6 @@
 /*jshint -W079*/
 /*jshint -W030*/
 
-process.env.NODE_ENV = 'test';
-
 const knex = require('../../../src/server/db/connection');
 const chai = require('chai');
 const should = chai.should();
@@ -26,7 +24,7 @@ const tests = () => {
 
       it('should not login unregistered user', (done) => {
         chai.request(server)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           user: {
             username: 'user',
@@ -50,7 +48,7 @@ const tests = () => {
 
       before((done) => {
         chai.request(server)
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({user})
         .end((err, res) => {
           done();
@@ -65,7 +63,7 @@ const tests = () => {
 
       it('should login a user', (done) => {
         chai.request(server)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({user})
         .end((err, res) => {
           res.body.token.should.exist;

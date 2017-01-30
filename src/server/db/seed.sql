@@ -70,7 +70,8 @@ INSERT INTO join_tags_models(tag_id, model_id) VALUES
 
 ALTER SEQUENCE users_id_seq RESTART WITH 1;
 INSERT INTO users(username, password) VALUES
-  ('alon01', '$2a$10$IP64aD6GTDUQvtHznWjdKOPazCiFghrh9B3TZADOnVWIF/aaXCKSG');
+  ('alon01', '$2a$10$IP64aD6GTDUQvtHznWjdKOPazCiFghrh9B3TZADOnVWIF/aaXCKSG'),
+  ('topleft', '$2a$10$YWXVLeTzjl5httlnFcSeYu9V85FCEnJlYlVX1.pdEBYH2riDLXGsS');
 
 ALTER SEQUENCE customer_types_id_seq RESTART WITH 1;
 INSERT INTO customer_types(type) VALUES

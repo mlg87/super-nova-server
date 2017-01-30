@@ -16,10 +16,12 @@ const authHelpers = {
   },
 
   decodeToken(token, cb) {
-    const payload = jwt.verify(token, process.env.TOKEN_SECRET);
-    const now = moment().unix();
-    if (now > payload.exp) cb('Token has expired.');
-    else cb(null, payload);
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
+      const now = moment().unix();
+      if (!payload) cb('Invalid token.');
+      else if (now > payload.exp) cb('Token has expired.');
+      else cb(null, payload);
+    });
   },
 
   comparePass(userpass, dbpass) {
@@ -38,15 +40,14 @@ const authHelpers = {
     authHelpers.decodeToken(token, (err, payload) => {
       if (err) {
         return res.status(401).json({
-          message: 'Token has expired'
+          message: err
         });
       } else {
         // check if the user still exists in the db
         knex('users').where({id: parseInt(payload.sub)}).first()
         .then((user) => {
           req.user = {id: user.id};
-          next()
-          return null
+          next();
         })
         .catch((err) => {
           res.status(500).json({
