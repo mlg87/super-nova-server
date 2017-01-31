@@ -18,7 +18,7 @@ DELETE FROM categories;
 -- reset the id field so it can be referenced by other tables
 ALTER SEQUENCE categories_id_seq RESTART WITH 1;
 INSERT INTO categories(name) VALUES
-  ('winter sports'), ('climbing'), ('water sports'), ('hiking');
+  ('Climb'), ('Snow'), ('Water'), ('Hike'), ('Camp'), ('Run'), ('Skate');
 
 ALTER SEQUENCE size_types_id_seq RESTART WITH 1;
 INSERT INTO size_types(name) VALUES
