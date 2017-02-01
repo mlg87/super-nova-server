@@ -35,7 +35,8 @@ RETURNS TABLE (
   gender VARCHAR(40),
   model VARCHAR(100),
   brand VARCHAR(100),
-  image_url TEXT
+  image_url TEXT,
+  category_id INT
 )
 AS $$
 
@@ -47,10 +48,12 @@ SELECT DISTINCT
   g.inventory AS gender,
   m.name AS model,
   b.name AS brand,
-  m.image_url
+  m.image_url,
+  c.id AS category_id
 FROM inventory i
 JOIN models m ON i.model_id = m.id
 JOIN item_types it ON m.item_type_id = it.id
+JOIN categories c ON c.id = it.category_id
 LEFT OUTER JOIN sizes s ON i.size_id = s.id
 LEFT OUTER JOIN genders g ON m.gender_id = g.id
 LEFT OUTER JOIN brands b ON m.brand_id = b.id
@@ -98,10 +101,10 @@ $$ LANGUAGE SQL;
 
 
 -- get inventory by searching through model, brand, type and tags.
--- Accepts a limit as a second argument.
+-- $2 = category_id, $3 = limit
 -- returns all values if TEXT = ''
-DROP FUNCTION search_inventory(TEXT, INT);
-CREATE FUNCTION search_inventory(TEXT, INT)
+DROP FUNCTION search_inventory(TEXT, INT, INT);
+CREATE FUNCTION search_inventory(TEXT, INT, INT)
 RETURNS TABLE (
   item_id INT,
   type VARCHAR(50),
@@ -110,12 +113,13 @@ RETURNS TABLE (
   gender VARCHAR(40),
   model VARCHAR(100),
   brand VARCHAR(100),
-  image_url TEXT
+  image_url TEXT,
+  category_id INT
 )
 AS $$
 
 -- we have to specify the fields again here
-SELECT DISTINCT item_id, type, g.uuid, size, gender, model, brand, g.image_url FROM get_inventory(null) g
+SELECT DISTINCT item_id, type, g.uuid, size, gender, model, brand, g.image_url, category_id FROM get_inventory(null) g
 -- join inventory to get the model_id
 JOIN inventory i ON i.id = item_id
 JOIN models m ON m.id = i.model_id
@@ -125,6 +129,7 @@ LEFT OUTER JOIN tags t ON jtm.tag_id = t.id
 -- model and brand need to be an exact match, type and tags can be close...
 -- spaces between search terms are treated with AND ('shoes kayak') will only return rows with both matching
 WHERE
+  ($2 = 0 OR $2 = category_id) AND
   $1 = '' OR
   model || ' '
   || brand || ' '
@@ -132,7 +137,7 @@ WHERE
   || COALESCE(to_tsvector(gender), ' ')
   || COALESCE(to_tsvector(t.tag), ' ')
   @@ to_tsquery(REPLACE($1, ' ', ' & '))
-LIMIT $2
+LIMIT $3
 
 $$ LANGUAGE SQL;
 
