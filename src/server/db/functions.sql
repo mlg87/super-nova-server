@@ -129,14 +129,20 @@ LEFT OUTER JOIN tags t ON jtm.tag_id = t.id
 -- model and brand need to be an exact match, type and tags can be close...
 -- spaces between search terms are treated with AND ('shoes kayak') will only return rows with both matching
 WHERE
-  ($2 = 0 OR $2 = category_id) AND
-  $1 = '' OR
-  model || ' '
-  || brand || ' '
-  || COALESCE(to_tsvector(type), ' ')
-  || COALESCE(to_tsvector(gender), ' ')
-  || COALESCE(to_tsvector(t.tag), ' ')
-  @@ to_tsquery(REPLACE($1, ' ', ' & '))
+  (
+    $2 = 0 OR
+    $2 = category_id
+  )
+  AND
+  (
+    $1 = '' OR
+    model || ' '
+    || brand || ' '
+    || COALESCE(to_tsvector(type), ' ')
+    || COALESCE(to_tsvector(gender), ' ')
+    || COALESCE(to_tsvector(t.tag), ' ')
+    @@ to_tsquery(REPLACE($1, ' ', ' & '))
+  )
 LIMIT $3
 
 $$ LANGUAGE SQL;
