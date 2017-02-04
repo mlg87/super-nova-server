@@ -18,7 +18,7 @@ DELETE FROM categories;
 -- reset the id field so it can be referenced by other tables
 ALTER SEQUENCE categories_id_seq RESTART WITH 1;
 INSERT INTO categories(name) VALUES
-  ('winter sports'), ('climbing'), ('water sports'), ('hiking');
+  ('Climb'), ('Snow'), ('Water'), ('Hike'), ('Camp'), ('Run'), ('Skate');
 
 ALTER SEQUENCE size_types_id_seq RESTART WITH 1;
 INSERT INTO size_types(name) VALUES
@@ -26,7 +26,7 @@ INSERT INTO size_types(name) VALUES
 
 ALTER SEQUENCE item_types_id_seq RESTART WITH 1;
 INSERT INTO item_types(name, category_id, size_type_id) VALUES
-  ('kayak', 3, null), ('climbing shoe', 2, 3), ('harness', 2, 1), ('backpack', 4, 1);
+  ('kayak', 3, null), ('climbing shoe', 1, 3), ('harness', 1, 1), ('backpack', 4, 1);
 
 ALTER SEQUENCE genders_id_seq RESTART WITH 1;
 INSERT INTO genders(customer, inventory) VALUES
@@ -145,5 +145,5 @@ VALUES
     'http://www.homefacts.com/images/offenders/california/thumb/18614023D273420161112.jpg'
   );
 
-insert into reservations(user_id, customer_id, date_range) values(1, 1, '[2017-02-01, 2017-02-03]');
-insert into join_reservations_inventory values(1, 1);
+-- insert into reservations(user_id, customer_id, date_range) values(1, 1, '[2017-02-01, 2017-02-03]');
+-- insert into join_reservations_inventory values(1, 1);
