@@ -11,46 +11,59 @@ const expect = chai.expect;
 
 chai.use(chaiAsPromised);
 
-const models =
+const crud =
   require('../../src/server/helpers/basic-crud');
 
+const table = 'models';
+
 const {
-  categoriesFixture,
-  sizeTypesFixture,
-  itemTypesFixture
+  categories,
+  size_types,
+  item_types,
+  brands,
+  models
 } = require('../fixtures/index');
 
 const tests = () => {
   describe('models helpers', () => {
 
+    let modelsInDb;
     let categoriesInDb;
     let sizeTypesInDb;
+    let brandsInDb;
     let itemsWithIds;
-    let itemType;
+    let modelsWithIds;
+    let model;
 
     before(() => {
+
       return Promise.all([
         knex('models').del(),
+        knex('brands').del(),
         knex('item_types').del(),
-        knex('categories').del(),
-        knex('size_types').del()
+        knex('size_types').del(),
+        knex('categories').del()
       ])
       .should.be.fulfilled
       .then(() => {
         return Promise.all([
           knex('categories')
             .returning(['id', 'name'])
-            .insert(categoriesFixture),
+            .insert(categories),
           knex('size_types')
             .returning(['id', 'name'])
-            .insert(sizeTypesFixture)
+            .insert(size_types),
+          knex('brands')
+            .returning(['id', 'name'])
+            .insert(brands)
         ]);
       })
       .should.be.fulfilled
       .then((result) => {
         categoriesInDb = result[0];
         sizeTypesInDb = result[1];
-        itemsWithIds = itemTypesFixture.map((item, i) => {
+        brandsInDb = result[2];
+        itemsWithIds = item_types.map((item, i) => {
           let ids = {
             category_id: categoriesInDb[i].id,
             size_type_id: sizeTypesInDb[i].id
@@ -59,79 +72,92 @@ const tests = () => {
         });
       })
       .then(() => {
-        itemType = {
-          name: 'Test Item Type',
-          category_id: categoriesInDb[0].id,
-          size_type_id: sizeTypesInDb[0].id,
-          description: 'great description'
-        };
         return knex('item_types').insert(itemsWithIds)
+        .returning(['id', 'name'])
         .should.be.fulfilled;
+      })
+      .then((itemTypes) => {
+        modelsWithIds = models.map((model, i) => {
+          let ids = {
+            item_type_id: itemTypes[i].id,
+            brand_id: brandsInDb[i].id
+          };
+          return Object.assign(model, ids);
+        });
+        return knex('models')
+        .returning(['brand_id', 'item_type_id'])
+        .insert(modelsWithIds);
+      })
+      .then((models) => {
+        model = models[0];
+        model.name = 'Test Model';
       });
     });
 
     after(() => {
       return Promise.all([
+        knex('models').del(),
+        knex('brands').del(),
         knex('item_types').del(),
-        knex('categories').del(),
-        knex('size_types').del()
+        knex('size_types').del(),
+        knex('categories').del()
       ])
       .should.be.fulfilled;
     });
 
     describe('getAll models', () => {
       it('should get all item-types', () => {
-        return models.getAll()
+        return crud.getAll(table)
         .should.be.fulfilled.and
         .should.eventually.have.length(3);
       });
     });
 
-    describe('addOne itemType', () => {
+    describe('addOne model', () => {
 
-      it('should not allow a nonexistant category id be inserted', () => {
-        const badCategoryId = Object.assign({}, itemType);
-        badCategoryId.category_id = 1000;
-        return models.addOne(badCategoryId)
+      it('should not allow a nonexistant brand id be inserted', () => {
+        const badBrandId = Object.assign({}, model);
+        badBrandId.brand_id = 1000;
+        return crud.addOne(table, badBrandId)
         .should.be.rejected
         .then((err) => {
           err.detail.should
-          .equal('Key (category_id)=(1000) is not present in table "categories".');
+          .equal('Key (brand_id)=(1000) is not present in table "brands".');
         });
       });
 
-      it('should not allow a nonexistant size_type id be inserted', () => {
-        const badSizeTypeId = Object.assign({}, itemType);
-        badSizeTypeId.size_type_id = 1000;
-        return models.addOne(badSizeTypeId)
+      it('should not allow a nonexistant item_type id be inserted', () => {
+        const badItemTypeId = Object.assign({}, model);
+        badItemTypeId.item_type_id = 1000;
+        return crud.addOne(table, badItemTypeId)
         .should.be.rejected
         .then((err) => {
           err.detail.should
-          .equal('Key (size_type_id)=(1000) is not present in table "size_types".');
+          .equal('Key (item_type_id)=(1000) is not present in table "item_types".');
         });
       });
 
-      it('should add one item-type', () => {
-        return models.addOne(itemType)
+      it('should add one model', () => {
+        return crud.addOne(table, model)
         .should.be.fulfilled
         .then(() => {
-          return knex('item_types')
-          .select(Object.keys(itemType))
-          .where('name', itemType.name)
+          return knex(table)
+          .select(Object.keys(model))
+          .where('name', model.name)
           .first();
         })
         .should.be.fulfilled
         .then((itemFromDb) => {
-          itemFromDb.should.deep.equal(itemType);
+          itemFromDb.should.deep.equal(model);
         });
       });
 
       it('should not allow a duplicate name', () => {
-        return models.addOne(itemType)
+        return crud.addOne(table, model)
         .should.be.rejected
         .then((err) => {
           err.detail.should
-          .equal('Key (name)=(Test Item Type) already exists.');
+          .equal(`Key (name, brand_id)=(${model.name}, ${model.brand_id}) already exists.`);
         });
       });
     });
@@ -139,21 +165,24 @@ const tests = () => {
     describe('editOne', () => {
 
       let itemFromDb;
+      let id;
 
       before(() => {
-        return knex('item_types').select().first()
+        return knex(table).select().first()
         .should.be.fulfilled
         .then((result) => {
+          id = result.id;
+          delete result.id;
           itemFromDb = result;
         });
       });
 
-      it('should edit an item_type in the db', () => {
+      it('should edit a model in the db', () => {
         itemFromDb.name = 'New Name';
-        return models.editOne(itemFromDb)
+        return crud.editOne(table, id, itemFromDb)
         .should.be.fulfilled
         .then(() => {
-          return knex('item_types').select().where('id', itemFromDb.id).first();
+          return knex(table).select().where('id', id).first();
         })
         .then((item) => {
           item.created_at.should.deep.equal(itemFromDb.created_at);
@@ -168,7 +197,7 @@ const tests = () => {
       let itemFromDb;
 
       before(() => {
-        return knex('item_types').select().first()
+        return knex(table).select().first()
         .should.be.fulfilled
         .then((result) => {
           itemFromDb = result;
@@ -176,17 +205,17 @@ const tests = () => {
       });
 
       it('should not delete if no id is passed', () => {
-        return models.deleteOne()
+        return crud.deleteOne(table)
         .should.be.rejectedWith('no id supplied');
       });
 
       it('should not delete if the argument is not a number', () => {
-        return models.deleteOne(['id'])
+        return crud.deleteOne(table, ['id'])
         .should.be.rejected;
       });
 
-      it('should remove an item_type', () => {
-        return models.deleteOne(itemFromDb.id)
+      it('should remove a model', () => {
+        return crud.deleteOne(table, itemFromDb.id)
         .should.be.fulfilled
         .then(() => {
           return knex('item_type').select().where('id', itemFromDb.id)

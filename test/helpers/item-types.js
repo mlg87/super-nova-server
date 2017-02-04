@@ -60,6 +60,7 @@ const tests = () => {
         });
       })
       .then(() => {
+        // set this here to use in later tests
         itemType = {
           name: 'Test Item Type',
           category_id: categoriesInDb[0].id,
