@@ -12,7 +12,7 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 const models =
-  require('../../src/server/helpers/models');
+  require('../../src/server/helpers/basic-crud');
 
 const {
   categoriesFixture,

@@ -1,6 +1,6 @@
 module.exports = {
-  categoriesFixture: require('./categories'),
-  brandsFixture: require('./brands'),
-  sizeTypesFixture: require('./size-types'),
-  itemTypesFixture: require('./item-types')
+  categories: require('./categories'),
+  brands: require('./brands'),
+  size_types: require('./size-types'),
+  item_types: require('./item-types')
 };
