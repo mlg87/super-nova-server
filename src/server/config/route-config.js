@@ -18,6 +18,7 @@
     router.use('/users/', routes.users);
     router.use('/categories/', routes.categories);
     router.use('/brands/', routes.brands);
+    router.use('/models/', routes.models);
     router.use('/size_types/', routes.size_types);
     router.use('/item_types/', routes.item_types);
     router.use('/inventory/', routes.inventory);
