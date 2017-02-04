@@ -31,7 +31,7 @@ module.exports = (table) => {
 
   router.put('/', (req, res, next) => {
     const id = req.body.id;
-    delete req.body.id
+    delete req.body.id;
     const editedFields = req.body;
     crud.editOne(table, id, {editedFields})
     .then(() => res.status(200).json({data: `Edited ${id} in ${table}`}))
@@ -45,5 +45,5 @@ module.exports = (table) => {
     .catch((err) => res.status(200).json({err: err}));
   });
 
-  return router
+  return router;
 };
