@@ -8,4 +8,4 @@ module.exports = [
   {
     name: 'The Big Easy'
   }
-]
+];

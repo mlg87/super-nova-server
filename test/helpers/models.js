@@ -36,7 +36,7 @@ const tests = () => {
     let model;
 
     before(() => {
-
+      // clear out tables
       return Promise.all([
         knex('models').del(),
         knex('brands').del(),
@@ -45,6 +45,7 @@ const tests = () => {
         knex('categories').del()
       ])
       .should.be.fulfilled
+      // add rows that we will need ids for FK's
       .then(() => {
         return Promise.all([
           knex('categories')
@@ -59,6 +60,7 @@ const tests = () => {
         ]);
       })
       .should.be.fulfilled
+      // make item types and insert into the DB
       .then((result) => {
         categoriesInDb = result[0];
         sizeTypesInDb = result[1];
@@ -70,12 +72,11 @@ const tests = () => {
           };
           return Object.assign(item, ids);
         });
-      })
-      .then(() => {
         return knex('item_types').insert(itemsWithIds)
         .returning(['id', 'name'])
         .should.be.fulfilled;
       })
+      // make models and insert into the DB
       .then((itemTypes) => {
         modelsWithIds = models.map((model, i) => {
           let ids = {
@@ -86,8 +87,10 @@ const tests = () => {
         });
         return knex('models')
         .returning(['brand_id', 'item_type_id'])
-        .insert(modelsWithIds);
+        .insert(modelsWithIds)
+        .should.be.fulfilled;
       })
+      // grab a model for use in the tests
       .then((models) => {
         model = models[0];
         model.name = 'Test Model';
