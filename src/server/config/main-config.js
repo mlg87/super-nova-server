@@ -8,7 +8,6 @@
   const bodyParser = require('body-parser');
   const morgan = require('morgan');
   const nunjucks = require('nunjucks');
-  const validator = require('express-validator');
 
   // *** view folders *** //
   const viewFolders = [
@@ -34,7 +33,6 @@
     app.use(cookieParser());
     app.use(bodyParser.urlencoded({ extended: true}));
     app.use(bodyParser.json());
-    app.use(validator());
 
     app.use(express.static(path.join(__dirname, '..', '..', 'client')));
 
