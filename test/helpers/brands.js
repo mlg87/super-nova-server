@@ -8,46 +8,46 @@ const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const should = chai.should();
 const expect = chai.expect;
-const categories =
-  require('../../src/server/helpers/categories');
-const categoriesFixture =
-  require('../fixtures/categories');
+const brands =
+  require('../../src/server/helpers/brands');
+const brandsFixture =
+  require('../fixtures/brands');
 
 chai.use(chaiAsPromised);
 
 const tests = () => {
-  describe('categories helpers', () => {
+  describe('brands helpers', () => {
 
     describe('getAll', () => {
 
       before(() => {
-        return knex('categories').del()
+        return knex('brands').del()
         .then((result) => {
-          return knex('categories')
-          .insert(categoriesFixture)
+          return knex('brands')
+          .insert(brandsFixture)
           .should.be.fulfilled;
         });
       });
 
-      it('should get an array of categories', () => {
-        return categories.getAll()
+      it('should get an array of brands', () => {
+        return brands.getAll()
         .should.eventually.have.length(3);
       });
     });
 
     describe('addOne', () => {
       before((done) => {
-        knex('categories').del()
+        knex('brands').del()
         .then((result) => {
           done();
         });
       });
 
-      it('should create a category', () => {
-        return categories.addOne('Test')
+      it('should create a brand', () => {
+        return brands.addOne('Test')
         .should.be.fulfilled
         .then((res) => {
-          return knex('categories').select().where({id: res[0]});
+          return knex('brands').select().where({id: res[0]});
         })
         .then((result) => {
           expect(result[0]).to.have.property('id');
@@ -57,7 +57,7 @@ const tests = () => {
       });
 
       it('it should not allow duplicate names', () => {
-        return categories.addOne('Test')
+        return brands.addOne('Test')
         .should.be.rejected
         .then((err) => {
           expect(err.detail).to.equal('Key (name)=(Test) already exists.');
@@ -70,9 +70,9 @@ const tests = () => {
       let id;
 
       beforeEach(() => {
-        return knex('categories').del()
+        return knex('brands').del()
         .then((result) => {
-          return knex('categories')
+          return knex('brands')
           .returning('id')
           .insert([{name: 'Test'}]);
         })
@@ -83,10 +83,10 @@ const tests = () => {
         });
       });
 
-      it('should edit a category', () => {
-        return categories.editOne(id, 'New Name')
+      it('should edit a brand', () => {
+        return brands.editOne(id, 'New Name')
         .then(() => {
-          return knex('categories').select().where({id: id});
+          return knex('brands').select().where({id: id});
         })
         .then((result) => {
           expect(result[0]).to.have.property('id');
@@ -98,14 +98,47 @@ const tests = () => {
       it('it should not allow duplicate names', () => {
         const duplicateName = 'Helmets';
 
-        return knex('categories').insert([{name: duplicateName}])
+        return knex('brands').insert([{name: duplicateName}])
         .then(() => {
-          return categories.editOne(id, duplicateName);
+          return brands.editOne(id, duplicateName);
         })
         .should.be.rejected
         .then((err) => {
           err.detail
           .should.equal(`Key (name)=(${duplicateName}) already exists.`);
+        });
+      });
+
+    });
+
+    describe('deleteOne', () => {
+
+      let itemFromDb;
+
+      before(() => {
+        return knex('brands').select().first()
+        .should.be.fulfilled
+        .then((result) => {
+          itemFromDb = result;
+        });
+      });
+
+      it('should not delete if no id is passed', () => {
+        return brands.deleteOne()
+        .should.be.rejectedWith('no id supplied');
+      });
+
+      it('should not delete if the argument is not a number', () => {
+        return brands.deleteOne(['id'])
+        .should.be.rejected;
+      });
+
+      it('should remove an item_type', () => {
+        return brands.deleteOne(itemFromDb.id)
+        .should.be.fulfilled
+        .then(() => {
+          return knex('item_type').select().where('id', itemFromDb.id)
+          .should.be.rejected;
         });
       });
 

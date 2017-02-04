@@ -8,46 +8,46 @@ const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const should = chai.should();
 const expect = chai.expect;
-const categories =
-  require('../../src/server/helpers/categories');
-const categoriesFixture =
-  require('../fixtures/categories');
 
 chai.use(chaiAsPromised);
 
+const sizeTypes =
+  require('../../src/server/helpers/size-types');
+
+const sizeTypesFixture =
+  require('../fixtures/size-types');
+
 const tests = () => {
-  describe('categories helpers', () => {
+  describe('sizeTypes helpers', () => {
 
     describe('getAll', () => {
 
       before(() => {
-        return knex('categories').del()
-        .then((result) => {
-          return knex('categories')
-          .insert(categoriesFixture)
+        return knex('size_types').del()
+        .then(() => {
+          return knex('size_types')
+          .insert(sizeTypesFixture)
           .should.be.fulfilled;
         });
       });
 
-      it('should get an array of categories', () => {
-        return categories.getAll()
+      it('should get an array of size_types', () => {
+        return sizeTypes.getAll()
         .should.eventually.have.length(3);
       });
     });
 
     describe('addOne', () => {
-      before((done) => {
-        knex('categories').del()
-        .then((result) => {
-          done();
-        });
+      before(() => {
+        return knex('size_types').del()
+        .should.be.fulfilled;
       });
 
-      it('should create a category', () => {
-        return categories.addOne('Test')
+      it('should create a size_type', () => {
+        return sizeTypes.addOne('Test')
         .should.be.fulfilled
         .then((res) => {
-          return knex('categories').select().where({id: res[0]});
+          return knex('size_types').select().where({id: res[0]});
         })
         .then((result) => {
           expect(result[0]).to.have.property('id');
@@ -57,7 +57,7 @@ const tests = () => {
       });
 
       it('it should not allow duplicate names', () => {
-        return categories.addOne('Test')
+        return sizeTypes.addOne('Test')
         .should.be.rejected
         .then((err) => {
           expect(err.detail).to.equal('Key (name)=(Test) already exists.');
@@ -70,9 +70,9 @@ const tests = () => {
       let id;
 
       beforeEach(() => {
-        return knex('categories').del()
+        return knex('size_types').del()
         .then((result) => {
-          return knex('categories')
+          return knex('size_types')
           .returning('id')
           .insert([{name: 'Test'}]);
         })
@@ -83,10 +83,10 @@ const tests = () => {
         });
       });
 
-      it('should edit a category', () => {
-        return categories.editOne(id, 'New Name')
+      it('should edit a size_type', () => {
+        return sizeTypes.editOne(id, 'New Name')
         .then(() => {
-          return knex('categories').select().where({id: id});
+          return knex('size_types').select().where({id: id});
         })
         .then((result) => {
           expect(result[0]).to.have.property('id');
@@ -98,9 +98,9 @@ const tests = () => {
       it('it should not allow duplicate names', () => {
         const duplicateName = 'Helmets';
 
-        return knex('categories').insert([{name: duplicateName}])
+        return knex('size_types').insert([{name: duplicateName}])
         .then(() => {
-          return categories.editOne(id, duplicateName);
+          return sizeTypes.editOne(id, duplicateName);
         })
         .should.be.rejected
         .then((err) => {
@@ -108,7 +108,6 @@ const tests = () => {
           .should.equal(`Key (name)=(${duplicateName}) already exists.`);
         });
       });
-
     });
 
   });

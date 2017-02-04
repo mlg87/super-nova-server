@@ -2,25 +2,25 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../db/connection');
 const authHelpers = require('../helpers/auth');
-const categoriesHelpers = require('../helpers/categories');
+const sizeTypesHelpers = require('../helpers/size-types');
 
 router.all('*', authHelpers.checkAuthentication);
 
 router.get('/', (req, res, next) => {
-  categoriesHelpers.getAll()
-  .then((categories) => {
-    res.status(200).json({data: categories});
+  sizeTypesHelpers.getAll()
+  .then((sizeTypes) => {
+    res.status(200).json({data: sizeTypes});
   })
   .catch((err) => {
-    res.status(500).json('There was an error retrieving the categories.');
+    res.status(500).json('There was an error retrieving the size types.');
   });
 });
 
 router.post('/', (req, res, next) => {
   const name = req.body.name;
-  categoriesHelpers.addOne(name)
+  sizeTypesHelpers.addOne(name)
   .then((result) => {
-    res.status(200).json({data: 'Created new category'});
+    res.status(200).json({data: 'Created new size type'});
   })
   .catch((err) => {
     res.status(500).json({err: err});
@@ -30,15 +30,15 @@ router.post('/', (req, res, next) => {
 router.put('/', (req, res, next) => {
   const id = req.body.id;
   const newName = req.body.name;
-  categoriesHelpers.editOne(id, newName)
-  .then(() => res.status(200).json({data: `Edited category`}))
+  sizeTypesHelpers.editOne(id, newName)
+  .then(() => res.status(200).json({data: `Edited size type`}))
   .catch((err) => res.status(500).json({err: err}));
 });
 
 router.delete('/', (req, res, next) => {
   const id = req.body.id;
-  categoriesHelpers.deleteOne(id)
-  .then(() => res.status(200).json({data: `Deleted Cateogory`}))
+  sizeTypesHelpers.deleteOne(id)
+  .then(() => res.status(200).json({data: `Deleted size type`}))
   .catch((err) => res.status(200).json({err: err}));
 });
 
