@@ -48,6 +48,8 @@ const authHelpers = {
         .then((user) => {
           req.user = {id: user.id};
           next();
+          // silence a warning by returning null
+          return null;
         })
         .catch((err) => {
           res.status(500).json({

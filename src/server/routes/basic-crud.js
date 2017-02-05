@@ -8,7 +8,7 @@ module.exports = (table) => {
 
   router.all('*', authHelpers.checkAuthentication);
 
-  router.get('/', (req, res, next) => {
+  router.get(`/${table}`, (req, res, next) => {
     crud.getAll(table)
     .then((data) => {
       res.status(200).json({data});
@@ -18,7 +18,7 @@ module.exports = (table) => {
     });
   });
 
-  router.post('/', (req, res, next) => {
+  router.post(`/${table}`, (req, res, next) => {
     const newDoc = req.body;
     crud.addOne(table, {newDoc})
     .then((result) => {
@@ -29,7 +29,7 @@ module.exports = (table) => {
     });
   });
 
-  router.put('/', (req, res, next) => {
+  router.put(`/${table}`, (req, res, next) => {
     const id = req.body.id;
     delete req.body.id;
     const editedFields = req.body;
@@ -38,7 +38,7 @@ module.exports = (table) => {
     .catch((err) => res.status(500).json({err: err}));
   });
 
-  router.delete('/', (req, res, next) => {
+  router.delete(`/${table}`, (req, res, next) => {
     const id = req.body.id;
     crud.deleteOne(table, id)
     .then(() => res.status(200).json({data: `Deleted ${id} in ${table}`}))
