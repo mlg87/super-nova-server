@@ -7,7 +7,6 @@ const jscs = require('gulp-jscs');
 const runSequence = require('run-sequence');
 const nodemon = require('gulp-nodemon');
 const plumber = require('gulp-plumber');
-const notify = require('gulp-notify');
 const server = require('tiny-lr')();
 // *** config *** //
 
@@ -59,9 +58,7 @@ gulp.task('jshint', () => {
     }))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'))
-    .pipe(notify({
-      message: 'jshint done'
-    }));
+    .pipe(plumber());
 });
 
 gulp.task('jscs', () => {
@@ -71,9 +68,7 @@ gulp.task('jscs', () => {
     .pipe(plumber())
     .pipe(jscs.reporter())
     .pipe(jscs.reporter('fail'))
-    .pipe(notify({
-      message: 'jscs done'
-    }));
+    .pipe(plumber());
 });
 
 gulp.task('styles', () => {

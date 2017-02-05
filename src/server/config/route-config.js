@@ -19,6 +19,7 @@
     router.use('/inventory/', routes.inventory);
     router.use('/customers/', routes.customers);
     router.use('/reservations/', routes.reservations);
+    router.use('/sizes', routes.sizes);
 
     // using the basic crud routes
     router.use('/', routes.categories);
