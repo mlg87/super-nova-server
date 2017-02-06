@@ -8,6 +8,27 @@ module.exports = (table) => {
 
   router.all('*', authHelpers.checkAuthentication);
 
+  router.get(`/${table}/some`, (req, res, next) => {
+    crud.getSome(table, req.query)
+    .then((data) => {
+      res.status(200).json({data});
+    })
+    .catch((err) => {
+      res.status(500).json(`There was an error retrieving the ${table}`);
+    });
+  });
+
+  router.get(`/${table}/:id`, (req, res, next) => {
+    const id = req.params.id
+    crud.getOne(table, id)
+    .then((data) => {
+      res.status(200).json({data});
+    })
+    .catch((err) => {
+      res.status(500).json(`There was an error retrieving the ${table}`);
+    });
+  });
+
   router.get(`/${table}`, (req, res, next) => {
     crud.getAll(table)
     .then((data) => {

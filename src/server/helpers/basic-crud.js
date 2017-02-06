@@ -8,6 +8,20 @@ module.exports = {
     .from(table);
   },
 
+  getOne: (table, id) => {
+    return knex
+    .select()
+    .from(table)
+    .where('id', id);
+  },
+
+  getSome: (table, query) => {
+    return knex
+    .select()
+    .from(table)
+    .where(query);
+  },
+
   addOne: (table, newDoc) => {
     return knex(table)
     .returning('id')
