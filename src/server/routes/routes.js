@@ -1,8 +1,12 @@
 module.exports = {
   auth: require('./auth'),
   inventory: require('./inventory'),
-  categories: require('./categories'),
   customers: require('./customers'),
+  users: require('./users'),
   reservations: require('./reservations'),
-  users: require('./users')
+  categories: require('./basic-crud')('categories'),
+  brands: require('./basic-crud')('brands'),
+  size_types: require('./basic-crud')('size_types'),
+  item_types: require('./basic-crud')('item_types'),
+  models: require('./basic-crud')('models')
 };
