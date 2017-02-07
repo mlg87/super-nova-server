@@ -26,14 +26,13 @@ router.post('/login', (req, res) => {
   const password = req.body.user.password;
   return knex('users').where({username}).first()
   .then((user) => {
-    authHelpers.comparePass(password, user.password);
-    return user;
-  })
-  .then((user) => {
-    return {
-      token: authHelpers.encodeToken(user),
-      id: user.id
-    };
+    if (authHelpers.comparePass(password, user.password)) {
+      return {
+        token: authHelpers.encodeToken(user),
+        id: user.id
+      }
+    }
+    throw new Error('Incorrect password')
   })
   .then((userInfo) => {
     res.status(200).json({
@@ -43,7 +42,7 @@ router.post('/login', (req, res) => {
     });
   })
   .catch((err) => {
-    res.status(400).json({message: 'Login failed.'});
+    res.status(400).json({message: err});
   });
 });
 

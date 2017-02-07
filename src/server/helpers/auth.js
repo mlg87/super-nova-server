@@ -25,7 +25,7 @@ const authHelpers = {
   },
 
   comparePass(userpass, dbpass) {
-    bcrypt.compareSync(userpass, dbpass);
+    return bcrypt.compareSync(userpass, dbpass);
   },
 
   checkAuthentication(req, res, next) {
