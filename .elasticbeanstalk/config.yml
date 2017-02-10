@@ -3,7 +3,7 @@ branch-defaults:
     environment: super-nova-server-dev
     group_suffix: null
 global:
-  application_name: super-nova-server
+  application_name: super-nova-server-dev
   branch: null
   default_ec2_keyname: super-nova-server-ssh
   default_platform: Node.js

@@ -8,6 +8,7 @@
 
   const port = normalizePort(process.env.PORT || '3001');
   app.set('port', port);
+  console.log('listening on port ' + port);
 
   const server = http.createServer(app);
 
