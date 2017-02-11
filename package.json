@@ -4,7 +4,8 @@
   "scripts": {
     "knex": "knex",
     "start": "node ./src/server/server",
-    "test": "./node_modules/mocha/bin/_mocha"
+    "test": "./node_modules/mocha/bin/_mocha",
+    "prestart": "node ./node_modules/knex/lib/bin/cli.js migrate:latest"
   },
   "dependencies": {
     "bcryptjs": "^2.4.0",
