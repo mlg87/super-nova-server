@@ -11,6 +11,8 @@ const expect = chai.expect;
 
 chai.use(chaiAsPromised);
 
+const testUtils = require('../testUtils');
+const fixtures = require('../fixtures/index');
 const crud =
   require('../../src/server/helpers/basic-crud');
 
@@ -36,14 +38,15 @@ const tests = () => {
     let model;
 
     before(() => {
+      let tables = [
+        'models',
+        'brands',
+        'item_types',
+        'size_types',
+        'categories'
+      ];
       // clear out tables
-      return Promise.all([
-        knex('models').del(),
-        knex('brands').del(),
-        knex('item_types').del(),
-        knex('size_types').del(),
-        knex('categories').del()
-      ])
+      testUtils.clearTables(tables)
       .should.be.fulfilled
       // add rows that we will need ids for FK's
       .then(() => {

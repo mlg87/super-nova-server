@@ -9,11 +9,11 @@ const testRunner = Promise.resolve();
 
 testRunner.then(() => {
 
-  categoryRoutes();
+  // categoryRoutes();
   authRoutes();
   authHelpers();
-  modelsCrud();
-  itemTypesCrud();
-  crudHelpers();
+  // modelsCrud();
+  // itemTypesCrud();
+  // crudHelpers();
 
 });

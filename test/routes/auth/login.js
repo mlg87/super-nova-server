@@ -13,14 +13,26 @@ const server = require('../../../src/server/app');
 
 const tests = () => {
   describe('auth/login', () => {
+    const user = {
+      username: 'user123',
+      password: 'pass123'
+    };
+
+    before((done) => {
+      chai.request(server)
+      .post('/api/auth/register')
+      .send({user})
+      .end((err, res) => {
+        done();
+      });
+    });
+
+    after(() => {
+      knex('users').del()
+      .should.be.fulfilled;
+    });
 
     describe('errors', () => {
-      before((done) => {
-        done();
-      });
-      after((done) => {
-        done();
-      });
 
       it('should not login unregistered user', (done) => {
         chai.request(server)
@@ -33,27 +45,29 @@ const tests = () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body.message).to.equal('Incorrect password');
+          expect(res.body.error).to.equal('Incorrect username');
+          done();
+        });
+      });
+
+      it('should not login user with wrong password', (done) => {
+        chai.request(server)
+        .post('/api/auth/login')
+        .send({
+          user: {
+            username: user.username,
+            password: 'wrong_pass'
+          }
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal('Incorrect password');
           done();
         });
       });
     });
 
     describe('success', () => {
-
-      const user = {
-        username: 'user123',
-        password: 'pass123'
-      };
-
-      before((done) => {
-        chai.request(server)
-        .post('/api/auth/register')
-        .send({user})
-        .end((err, res) => {
-          done();
-        });
-      });
 
       after((done) => {
         knex('users').del().then(() => {

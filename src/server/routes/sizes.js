@@ -10,6 +10,7 @@ router.get(`/item_type/:item_type_id`, (req, res, next) => {
   const item_type_id = req.params.item_type_id;
   sizes.getWithItemType(item_type_id)
   .then((data) => {
+    console.log(data.rows);
     res.status(200).json({ data: data.rows });
   })
   .catch((err) => {
