@@ -18,14 +18,6 @@ const crud =
 
 const table = 'models';
 
-const {
-  categories,
-  size_types,
-  item_types,
-  brands,
-  models
-} = require('../fixtures/index');
-
 const tests = () => {
   describe('models helpers', () => {
 
@@ -46,21 +38,16 @@ const tests = () => {
         'categories'
       ];
       // clear out tables
-      testUtils.clearTables(tables)
+      return testUtils.clearTables(tables)
       .should.be.fulfilled
       // add rows that we will need ids for FK's
       .then(() => {
-        return Promise.all([
-          knex('categories')
-            .returning(['id', 'name'])
-            .insert(categories),
-          knex('size_types')
-            .returning(['id', 'name'])
-            .insert(size_types),
-          knex('brands')
-            .returning(['id', 'name'])
-            .insert(brands)
-        ]);
+        let tables = [
+          'categories',
+          'size_types',
+          'brands'
+        ];
+        return testUtils.seedInventoryReturningIdAndName(tables, fixtures);
       })
       .should.be.fulfilled
       // make item types and insert into the DB
@@ -68,31 +55,22 @@ const tests = () => {
         categoriesInDb = result[0];
         sizeTypesInDb = result[1];
         brandsInDb = result[2];
-        itemsWithIds = item_types.map((item, i) => {
-          let ids = {
-            category_id: categoriesInDb[i].id,
-            size_type_id: sizeTypesInDb[i].id
-          };
-          return Object.assign(item, ids);
-        });
-        return knex('item_types').insert(itemsWithIds)
-        .returning(['id', 'name'])
-        .should.be.fulfilled;
+        return testUtils.createItemTypes(
+          fixtures.item_types,
+          categoriesInDb,
+          sizeTypesInDb
+        );
       })
+      .should.be.fulfilled
       // make models and insert into the DB
-      .then((itemTypes) => {
-        modelsWithIds = models.map((model, i) => {
-          let ids = {
-            item_type_id: itemTypes[i].id,
-            brand_id: brandsInDb[i].id
-          };
-          return Object.assign(model, ids);
-        });
-        return knex('models')
-        .returning(['brand_id', 'item_type_id'])
-        .insert(modelsWithIds)
-        .should.be.fulfilled;
+      .then((itemTypesInDb) => {
+        return testUtils.createModels(
+          fixtures.models,
+          itemTypesInDb,
+          brandsInDb
+        );
       })
+      .should.be.fulfilled
       // grab a model for use in the tests
       .then((models) => {
         model = models[0];
@@ -101,13 +79,15 @@ const tests = () => {
     });
 
     after(() => {
-      return Promise.all([
-        knex('models').del(),
-        knex('brands').del(),
-        knex('item_types').del(),
-        knex('size_types').del(),
-        knex('categories').del()
-      ])
+      let tables = [
+        'models',
+        'brands',
+        'item_types',
+        'size_types',
+        'categories'
+      ];
+      // clear out tables
+      return testUtils.clearTables(tables)
       .should.be.fulfilled;
     });
 
