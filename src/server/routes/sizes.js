@@ -10,8 +10,7 @@ router.get(`/item_type/:item_type_id`, (req, res, next) => {
   const item_type_id = req.params.item_type_id;
   sizes.getAllWithItemType(item_type_id)
   .then((data) => {
-    console.log(data.rows);
-    res.status(200).json({ data: data.rows });
+    res.status(200).json({ data: data });
   })
   .catch((err) => {
     res.status(500).json({error: err, message: 'An error occured whle retrieving sizes'});
