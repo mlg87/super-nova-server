@@ -16,7 +16,7 @@ router.post('/register', (req, res)  => {
       if (err) {
         res.status(400).json(err);
       } else {
-        res.status(400).json({message: 'Regsitration failed'});
+        res.status(400).json({error: 'Regsitration failed'});
       }
     });
 });
@@ -59,7 +59,7 @@ router.get('/current_user', authHelpers.checkAuthentication, (req, res) => {
     res.status(200).json({data: result});
   })
   .catch((err) => {
-    res.status(500).json({message: 'An error ocurred while getting the current user.'});
+    res.status(500).json({error: 'An error ocurred while getting the current user.'});
   });
 });
 

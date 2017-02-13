@@ -8,7 +8,7 @@ router.get('/search', (req, res) => {
     res.status(200).json(result.rows);
   })
   .catch((err) => {
-    res.status(500).json({message: 'An error ocurred while fetching customers.'});
+    res.status(500).json({error: err, message: 'An error ocurred while fetching customers.'});
   });
 });
 

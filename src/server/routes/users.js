@@ -8,7 +8,7 @@ router.get('/all', (req, res) => {
     res.status(200).json({data: users})
   })
   .catch((err) => {
-    res.status(500).json({message: 'Oh man we fucked up big!'})
+    res.status(500).json({error: err, message: 'Oh man we fucked up big!'})
   })
 })
 
@@ -22,7 +22,7 @@ router.delete('/remove', (req, res) => {
     res.status(200).json({data: ids})
   })
   .catch((err) => {
-    res.status(500).json({message: 'Oops. We didn\'t get those users deleted :/'})
+    res.status(500).json({error: err, message: 'Oops. We didn\'t get those users deleted :/'})
   })
 })
 

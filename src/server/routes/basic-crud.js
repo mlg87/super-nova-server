@@ -14,7 +14,7 @@ module.exports = (table) => {
       res.status(200).json({data});
     })
     .catch((err) => {
-      res.status(500).json(`There was an error retrieving the ${table}`);
+      res.status(500).json({error: err, message: `There was an error retrieving the ${table}`});
     });
   });
 
@@ -25,7 +25,7 @@ module.exports = (table) => {
       res.status(200).json({data});
     })
     .catch((err) => {
-      res.status(500).json(`There was an error retrieving the ${table}`);
+      res.status(500).json({error: err, message: `There was an error retrieving the ${table}`});
     });
   });
 
@@ -35,12 +35,14 @@ module.exports = (table) => {
       res.status(200).json({data});
     })
     .catch((err) => {
-      res.status(500).json(`There was an error retrieving the ${table}`);
+      res.status(500).json({error: err, message: `There was an error retrieving the ${table}`});
     });
   });
 
   router.post(`/${table}`, (req, res, next) => {
     let newDoc = req.body;
+    // some routes call were set up with the body like so {table: {newDoc}}
+    // so this little work around will do for now
     if (newDoc[table]) {
       newDoc = newDoc[table];
     }
@@ -49,7 +51,7 @@ module.exports = (table) => {
       res.status(200).json({data: `Created new row in ${table}`});
     })
     .catch((err) => {
-      res.status(500).json({err: err});
+      res.status(500).json({error: err, message: });
     });
   });
 
@@ -59,14 +61,24 @@ module.exports = (table) => {
     const editedFields = req.body;
     crud.editOne(table, id, [editedFields])
     .then(() => res.status(200).json({data: `Edited ${id} in ${table}`}))
-    .catch((err) => res.status(500).json({err: err}));
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+        message: 'There was an error editing the doc'
+      });
+    });
   });
 
   router.delete(`/${table}`, (req, res, next) => {
     const id = req.body.id;
     crud.deleteOne(table, id)
     .then(() => res.status(200).json({data: `Deleted ${id} in ${table}`}))
-    .catch((err) => res.status(200).json({err: err}));
+    .catch((err) => {
+      res.status(200).json({
+        error: err,
+        message: 'There was an error deleting the doc'
+      });
+    });
   });
 
   return router;
