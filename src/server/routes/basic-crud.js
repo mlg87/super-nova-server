@@ -19,7 +19,7 @@ module.exports = (table) => {
   });
 
   router.get(`/${table}/:id`, (req, res, next) => {
-    const id = req.params.id
+    const id = req.params.id;
     crud.getOne(table, id)
     .then((data) => {
       res.status(200).json({data});
@@ -40,8 +40,11 @@ module.exports = (table) => {
   });
 
   router.post(`/${table}`, (req, res, next) => {
-    const newDoc = req.body;
-    crud.addOne(table, {newDoc})
+    let newDoc = req.body;
+    if (newDoc[table]) {
+      newDoc = newDoc[table];
+    }
+    crud.addOne(table, [newDoc])
     .then((result) => {
       res.status(200).json({data: `Created new row in ${table}`});
     })
@@ -54,7 +57,7 @@ module.exports = (table) => {
     const id = req.body.id;
     delete req.body.id;
     const editedFields = req.body;
-    crud.editOne(table, id, {editedFields})
+    crud.editOne(table, id, [editedFields])
     .then(() => res.status(200).json({data: `Edited ${id} in ${table}`}))
     .catch((err) => res.status(500).json({err: err}));
   });

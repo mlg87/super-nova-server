@@ -81,11 +81,11 @@ const tests = () => {
 
     after(() => {
       let tables = [
+        'sizes',
         'models',
         'brands',
-        'item_types',
-        'sizes',
         'size_types',
+        'item_types',
         'categories'
       ];
       // clear out tables
