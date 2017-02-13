@@ -1,11 +1,11 @@
 branch-defaults:
   deployment-attempt:
-    environment: super-nova-server-dev
+    environment: super-nova-server
     group_suffix: null
 global:
-  application_name: super-nova-server-dev
+  application_name: super-nova-server
   branch: null
-  default_ec2_keyname: super-nova-server-ssh
+  default_ec2_keyname: super-nova-server
   default_platform: Node.js
   default_region: us-west-2
   profile: eb-cli
