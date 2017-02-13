@@ -9,7 +9,10 @@ router.get('/inventory/search', (req, res) => {
     res.status(200).json({data: result.rows});
   })
   .catch((err) => {
-    res.status(500).json({error: 'An error ocurred while fetching inventory.'});
+    res.status(500).json({
+      error: err,
+      message: 'An error ocurred while fetching inventory.'
+    });
   });
 });
 

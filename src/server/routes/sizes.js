@@ -13,7 +13,10 @@ router.get(`/item_type/:item_type_id`, (req, res, next) => {
     res.status(200).json({ data: data });
   })
   .catch((err) => {
-    res.status(500).json({error: err, message: 'An error occured whle retrieving sizes'});
+    res.status(500).json({
+      error: err,
+      message: 'An error occured whle retrieving sizes'
+    });
   });
 });
 
