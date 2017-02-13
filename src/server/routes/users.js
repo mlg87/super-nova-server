@@ -16,8 +16,8 @@ router.get('/all', (req, res) => {
 });
 
 router.delete('/remove', (req, res) => {
-  const { ids } = req.body
-  return knex('users').whereIn('id', ids).del();
+  const { ids } = req.body;
+  return knex('users').whereIn('id', ids).del()
   .then((count) => {
     // delete returns a count of the rows deleted, sending back the ids so we can
     // pull them from the arr on the client and get that updated without doing
@@ -27,8 +27,8 @@ router.delete('/remove', (req, res) => {
   .catch((err) => {
     res.status(500).json({
       error: err,
-       message: 'Oops. We didn\'t get those users deleted :/'
-     });
+      message: 'Oops. We didn\'t get those users deleted :/'
+    });
   });
 });
 

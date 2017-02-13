@@ -51,7 +51,7 @@ module.exports = (table) => {
       res.status(200).json({data: `Created new row in ${table}`});
     })
     .catch((err) => {
-      res.status(500).json({error: err, message: });
+      res.status(500).json({error: err, message: 'There was an error creating the document'});
     });
   });
 
