@@ -1,7 +1,7 @@
 (function() {
 
   'use strict';
-  // travis again and again
+  // travis again and again and again
   require('dotenv').config({silent: true})
 
   // *** dependencies *** //
