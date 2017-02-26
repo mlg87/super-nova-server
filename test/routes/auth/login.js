@@ -10,7 +10,7 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
 const server = require('../../../src/server/app');
-console.log(server);
+
 const tests = () => {
   describe('auth/login', () => {
     const user = {
@@ -23,6 +23,8 @@ const tests = () => {
       .post('/api/auth/register')
       .send({user})
       .end((err, res) => {
+        console.log('err', err);
+        console.log('res', res);
         done();
       });
     });
