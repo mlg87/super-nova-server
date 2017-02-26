@@ -9,4 +9,4 @@ services:
   - postgresql
 before_script:
   - psql -c 'create database supernova_test;' -U postgres
-  - npm run knex migrate:latest
+  - psql -f ./src/server/db/tableCreation.sql -d supernova_test
