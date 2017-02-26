@@ -5,4 +5,7 @@ node_js:
 env:
   global:
   - NODE_ENV=test
-  - secure: NzZYSv4XjXm3YrptswZ7J0vCbEtaXR1bFXcs+x9m/UiqsQQmgxIh+llU9cAcR+4lXdi25R2CzbK0FzxUE4WOtQdeZYQ+9JWwk5fJyOvbU/rV6Nabwu81GR1BpqrGtJ+yiOVZhD+Ai5gSZmLmUqGUY6U2dZtdEJjgOp1+V1dgiAEeqLruDvjW5WLMrSYUg/wmvIQjrzvKA/DYa4gwRLJ/MIgan5cYf4C9nvXig80ya6/RAGM0NPWb8zOZQVmIfTLdoOTt/JjLe2pthopt+ECx7H0re1kBKBb9AmFSR4kK1LuG04RVEyQrl87MeFUDDj6mZ5AuHUEp2tHeePEt4xB1cW69BTqHqhC/xh2c1hX/A2XuCnGTKZzH648XORf+T030wkbklw12FB6c9uqPa1EZwbNoPW9nd/Bb/DsVRZ44JdDz9XacTXFuYYq0bTuypdTfuu4jMhg44eVv8Y5TiInTH7r8O449cUfihIT3hVyOPyZtSj/EOEkZrJwoVqMRx7HOslC9zj1Tc1x4vBoGrqxJ6rFvj+GBs+pu5dVrImSj2uZbieThsH/GNBjtYuS252tFN/B0aSPVGC++jJNPvkcRrw3+Bc7THz2dFINMJDCe1lvQ0qp6FXNGsc6IStQiGdp5SkTWQElmF5jiDZBHkz6uVvqx5tin4jwY/iYws3OR0qw=
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database supernova_test;' -U postgres
