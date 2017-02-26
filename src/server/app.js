@@ -2,13 +2,14 @@
 
   'use strict';
   // travis again and again
+  require('dotenv').config({silent: true})
+
   // *** dependencies *** //
   const express = require('express');
 
   const appConfig = require('./config/main-config.js');
   const routeConfig = require('./config/route-config.js');
   const errorConfig = require('./config/error-config.js');
-
   // *** express instance *** //
   const app = express();
 
