@@ -1,8 +1,8 @@
 (function() {
 
   'use strict';
-  // travis again and again and again
-  require('dotenv').config({silent: true})
+
+  require('dotenv').config({silent: true});
 
   // *** dependencies *** //
   const express = require('express');
