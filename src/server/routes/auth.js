@@ -3,11 +3,6 @@ const router = express.Router();
 const authHelpers = require('../helpers/auth');
 const knex = require('../db/connection');
 
-// just for the travis setup
-router.get('/', (req, res) => {
-  res.status(200);
-});
-
 router.post('/register', (req, res)  => {
   authHelpers.createUser(req)
   .then((user) => { return authHelpers.encodeToken(user[0]); })

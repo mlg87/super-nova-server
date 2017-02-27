@@ -10,12 +10,12 @@ const testRunner = Promise.resolve();
 
 testRunner.then(() => {
 
-  // categoryRoutes();
+  categoryRoutes();
   authRoutes();
-  // authHelpers();
-  // modelsCrud();
-  // sizesCrud();
-  // itemTypesCrud();
-  // crudHelpers();
+  authHelpers();
+  modelsCrud();
+  sizesCrud();
+  itemTypesCrud();
+  crudHelpers();
 
 });

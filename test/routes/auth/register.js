@@ -17,16 +17,6 @@ const tests = () => {
   describe('/api/auth/register', () => {
 
     describe('errors', () => {
-      it('should get a 200', () => {
-        chai.request(server)
-        .get('/api/auth/')
-        .end((err, res) => {
-          res.status.should.equal(200);
-        })
-      });
-    });
-
-    xdescribe('errors', () => {
 
       beforeEach((done) => {
         done();
@@ -54,7 +44,7 @@ const tests = () => {
       });
     });
 
-    xdescribe('success', () => {
+    describe('success', () => {
       let response = null;
       let error = null;
 
