@@ -9,11 +9,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/register', (req, res)  => {
-  console.log('=================');
-  console.log('=================');
-  console.log('=================');
-  console.log('=================');
-  console.log('=================');
   authHelpers.createUser(req)
   .then((user) => { return authHelpers.encodeToken(user[0]); })
   .then((token) => {
