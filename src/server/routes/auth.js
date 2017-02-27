@@ -4,7 +4,6 @@ const authHelpers = require('../helpers/auth');
 const knex = require('../db/connection');
 
 router.post('/register', (req, res)  => {
-  console.log('hererererer?');
   authHelpers.createUser(req)
   .then((user) => { return authHelpers.encodeToken(user[0]); })
   .then((token) => {

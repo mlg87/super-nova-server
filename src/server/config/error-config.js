@@ -25,6 +25,7 @@
 
     // production error handler (no stacktraces leaked to user)
     app.use(function(err, req, res, next) {
+      console.log('are were in the error handler?');
       res.status(err.status || 500).send({
         message: err.message,
         error: {}
