@@ -23,8 +23,6 @@ const tests = () => {
       .post('/api/auth/register')
       .send({user})
       .end((err, res) => {
-        console.log('err', err);
-        console.log('res', res);
         done();
       });
     });
