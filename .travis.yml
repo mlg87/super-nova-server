@@ -2,13 +2,14 @@ language:
 - node_js
 node_js:
 - '6'
+dist: trusty
 env:
   global:
   - NODE_ENV=test
 services:
   - postgresql
+addons:
+  postgresql: 9.6
 before_script:
   - psql -U postgres -c 'CREATE DATABASE supernova_test;'
   - psql -f ./src/server/db/tableCreation.sql -d supernova_test
-addons:
-  postgresql: 9.6
