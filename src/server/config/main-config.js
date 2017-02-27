@@ -15,7 +15,7 @@
   ];
 
   // *** load environment variables *** //
-  require('dotenv').config();
+  require('dotenv').config({silent: true});
 
   appConfig.init = function(app, express) {
 

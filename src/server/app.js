@@ -2,8 +2,6 @@
 
   'use strict';
 
-  require('dotenv').config({silent: true});
-
   // *** dependencies *** //
   const express = require('express');
 
