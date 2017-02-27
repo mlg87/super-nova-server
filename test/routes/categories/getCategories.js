@@ -5,7 +5,6 @@
 const knex = require('../../../src/server/db/connection');
 const chai = require('chai');
 const sinon = require('sinon');
-const td = require('testdouble');
 const should = chai.should();
 const expect = chai.expect;
 const chaiHttp = require('chai-http');

@@ -1,7 +1,16 @@
 language:
-- node_js
+  - node_js
 node_js:
-- '6'
+  - '6'
+dist: trusty
 env:
   global:
   - NODE_ENV=test
+  - secure: BkgNpOSXqwo/r8+xmPavQA0Ca21w1TPw14wG0AdC6dwRdp80OcyykwzuCiJfQWY62stgpsIbQilRXpxg7NEwqKuLMry2ZAgOPlOrW5flwPl17HKh/rBv7PTBUWcmUMM4npCh/sebQG9cvtepMpWyesdd/ZToedBzEgXu6xPkJ2nv+60/9xa9kv2NCHaujwPGSrUNTmlYMRsbrTi/Vk+tfcY+1pHEwuR6mZWyvmWACj8tqg+Qg2o965nQiM2gtIAE4ltMWIUlAz8R35VsH4Eq8ss9GVaQ5U42uQXjjMnAgeL0mpO8mhq/o5L2mykNPquFDT6lSKfyRdvYbOveFiPLagbmODhZsHm3QDweDSTgOF+jOeedadQwlYnWmJWxvkq6KyAC8lSxEZNddChPKEYrsv/GHelD62uUcH/7BVqzhNVFVEOmg8HSOdd22jwak8f9rn/D6uZB8+rTktiomvCcJd8KkW+DX/OeneZ9KislvyX6ZJ1io4CVnDW0ejTqWJUiGf8aQDfRfe1Tt1m9NkZalAvjsjQ9j0nIYcO5REDjAYi+fw82/iPN9G1813pjTrqR9mvs/sHfRA3sgZc22+rdCrMXLHKoUHMxliygsWgW3RpfMmTA2CT0icRSiIO9FIIXAsjsYQfvWtFF1dFUSi3uU+59Eh8yaLHRLqNudM72uNw=
+services:
+- postgresql
+addons:
+  postgresql: 9.6
+before_script:
+- psql -U postgres -c 'CREATE DATABASE supernova_test;'
+- psql -f ./src/server/db/tableCreation.sql -d supernova_test
