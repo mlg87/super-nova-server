@@ -36,7 +36,6 @@ const tests = () => {
       let sandbox = sinon.sandbox.create();
       let auth;
       beforeEach((done) => {
-        console.log('before');
         auth = sinon.stub(authHelpers, 'checkAuthentication');
         auth.callsArg(2);
         done();

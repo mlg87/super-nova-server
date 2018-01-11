@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.com/space-goat/super-nova-server.svg?token=jBrdGhzXZExHMdqKab4U&branch=dev)](https://travis-ci.com/space-goat/super-nova-server)
+
+[![Build Status](https://travis-ci.com/space-goat/super-nova-server.svg?token=jBrdGhzXZExHMdqKab4U&branch=master)](https://travis-ci.com/space-goat/super-nova-server)
+
 ## Fire It Up (but do the setup first)
 
 ```sh

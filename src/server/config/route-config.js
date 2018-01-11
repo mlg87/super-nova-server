@@ -10,17 +10,17 @@
     app.use('/api', router);
 
     // *** routes *** //
-    const routes = require('../routes/routes');
+    const routes = require('../routes/index');
 
     // *** register routes *** //
-
     router.use('/auth/', routes.auth);
     router.use('/users/', routes.users);
-    router.use('/inventory/', routes.inventory);
     router.use('/customers/', routes.customers);
     router.use('/reservations/', routes.reservations);
+    router.use('/sizes', routes.sizes);
 
     // using the basic crud routes
+    router.use('/', routes.inventory);
     router.use('/', routes.categories);
     router.use('/', routes.brands);
     router.use('/', routes.models);
